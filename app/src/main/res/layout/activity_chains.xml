@@ -6,8 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--chain 有三种样式 spread  packed spread_inside-->
-
+    <!--如何生成chain 两个空间之间互相链接
+        app:layout_constraintEnd_toStartOf="@+id/button8"
+        app:layout_constraintStart_toEndOf="@+id/button7"
+    -->
+    <!--chain 有三种样式 spread  packed  spread_inside-->
     <!--spread - 元素将被展开 平铺（默认样式）-->
     <Button
         android:id="@+id/button7"
