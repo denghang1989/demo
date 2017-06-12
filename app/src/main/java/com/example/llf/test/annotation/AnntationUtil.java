@@ -12,7 +12,7 @@ import java.lang.reflect.Proxy;
  * @author denghang
  * @version V1.0
  * @Package com.example.llf.test.annotation
- * @Description: (用一句话描述该文件做什么)
+ * @Description: (IOC 测试demo)
  * @date 2017/5/31 20
  */
 public class AnntationUtil {
