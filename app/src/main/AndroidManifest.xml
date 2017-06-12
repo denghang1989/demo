@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="com.example.llf.test"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:name=".App"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".HLinearLayoutActivity"/>
+        <activity android:name=".VLinearLayoutActivity"/>
+        <activity android:name=".RelativeLayoutActivity"/>
+        <activity android:name=".BaselineActivity"/>
+        <activity android:name=".GoneActivity"/>
+        <activity android:name=".ChainsActivity"/>
+        <activity android:name=".BiasActivity"/>
+        <activity android:name=".GuidelineActivity"/>
+        <activity android:name=".BarrierActivity"/>
+    </application>
+
+</manifest>

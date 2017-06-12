@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--
+    Guideline只能用于ConstraintLayout中，是一个工具类，不会被显示，仅仅用于辅助布局。它可以是horizontal或者 vertical的
+        vertical的Guideline宽度为零，高度为ConstraintLayout的高度
+        horizontal的Guideline高度为零，宽度为ConstraintLayout的高度
+        android:orientation="vertical"
+
+        定位Guideline有三种方式：
+            指定距离左侧或顶部的固定距离（layout_constraintGuide_begin）
+            指定距离右侧或底部的固定距离（layout_constraintGuide_end）
+            指定在父控件中的宽度或高度的百分比（layout_constraintGuide_percent）
+    -->
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="20dp"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5"/>
+
+</android.support.constraint.ConstraintLayout>

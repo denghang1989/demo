@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--
+            1.layout_constraintDimensionRatio 定义控件宽高比例 （默认：W:H）
+            2.layout_width 和 layout_height 必须一个为：0dp（只有一个方向约束，多个方向约束 必须都为0dp）
+        -->
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintDimensionRatio="W,1024:600"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/xixi"/>
+
+    <!--
+            1.layout_constraintDimensionRatio 定义控件宽高比例 （默认：W:H）
+            2.layout_width 和 layout_height 必须一个为：0dp（只有一个方向约束，多个方向约束 必须都为0dp）
+            3.width 确定，height = 0dp ：app:layout_constraintDimensionRatio="H,1024:600" app:layout_constraintDimensionRatio="W,600:1024"
+            4.height 确定 width = 0dp ；
+        -->
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintDimensionRatio="H,1024:600"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:srcCompat="@mipmap/xixi"/>
+
+    <!--
+            1.layout_constraintDimensionRatio 定义控件宽高比例,固定一个方向的数据 （默认：W:H）
+            2.layout_width 和 layout_height 必须一个为：0dp（只有一个方向约束，多个方向约束 必须都为0dp）
+        -->
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="200dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:text="Button"
+        app:layout_constraintDimensionRatio="2:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"/>
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 垂直方向的linearLayout
+    1. 设置垂直方向： layout_height = 0dp;
+    2. 设置垂直方向权重：layout_constraintVertical_weight
+    3. 设置垂直方向的全部控件建立连接；chain
+    -->
+
+    <Button
+        android:id="@+id/button48"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:text="Button"
+        app:layout_constraintBottom_toTopOf="@+id/button49"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_weight="1"/>
+
+    <Button
+        android:id="@+id/button49"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="Button"
+        app:layout_constraintBottom_toTopOf="@+id/button50"
+        app:layout_constraintStart_toStartOf="@+id/button48"
+        app:layout_constraintTop_toBottomOf="@+id/button48"
+        app:layout_constraintVertical_weight="2"/>
+
+    <Button
+        android:id="@+id/button50"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/button49"
+        app:layout_constraintTop_toBottomOf="@+id/button49"
+        app:layout_constraintVertical_weight="2"/>
+
+</android.support.constraint.ConstraintLayout>
