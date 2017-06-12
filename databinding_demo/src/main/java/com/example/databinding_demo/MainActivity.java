@@ -5,6 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.databinding_demo.findview.SimpleDataBinding02Activity;
+import com.example.databinding_demo.findview.SimpleDataBindingActivity;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override

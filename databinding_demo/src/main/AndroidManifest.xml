@@ -16,8 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".SimpleDataBindingActivity"/>
-        <activity android:name=".SimpleDataBinding02Activity"/>
+        <activity android:name=".findview.SimpleDataBindingActivity"/>
+        <activity android:name=".findview.SimpleDataBinding02Activity"/>
+        <activity android:name=".simple_data.SimpleDataActivity"/>
     </application>
 
 </manifest>
