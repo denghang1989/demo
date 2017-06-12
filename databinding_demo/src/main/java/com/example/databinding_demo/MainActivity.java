@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.example.databinding_demo.findview.SimpleDataBinding02Activity;
 import com.example.databinding_demo.findview.SimpleDataBindingActivity;
+import com.example.databinding_demo.simple_data.SimpleDataActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, SimpleDataBinding02Activity.class));
                 break;
             case R.id.button3:
+                startActivity(new Intent(this, SimpleDataActivity.class));
                 break;
             case R.id.button4:
                 break;
