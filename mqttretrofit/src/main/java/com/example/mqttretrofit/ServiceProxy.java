@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 /**
  * @date 2017/6/20 10
  */
-class ServiceProxy implements InvocationHandler {
+public class ServiceProxy implements InvocationHandler {
     private MqttRetrofit mMqttRetrofit;
 
     public ServiceProxy(MqttRetrofit mqttRetrofit) {
@@ -22,7 +22,6 @@ class ServiceProxy implements InvocationHandler {
         }
         ServiceMethod serviceMethod = loadServiceMethod(method);
         MqttMessage message = serviceMethod.getMessage(args);
-        mMqttRetrofit.getClientMqttClient().publish(serviceMethod.getTopic(), message);
         return null;
     }
 
