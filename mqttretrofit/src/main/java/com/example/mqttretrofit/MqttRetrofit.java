@@ -1,6 +1,6 @@
 package com.example.mqttretrofit;
 
-import org.eclipse.paho.client.mqttv3.MqttClient;
+import com.example.mqttretrofit.devicebusiness.devicemqtt.ClientMqttClient;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -17,7 +17,7 @@ public class MqttRetrofit {
     private final Map<Method, ServiceMethod> serviceMethodCache = new LinkedHashMap<>();
     private final Converter.Factory mConverter;
     private final CallAdapter.Factory mCallAdapter;
-    private final MqttClient mClientMqttClient;
+    private final ClientMqttClient mClientMqttClient;
 
     private MqttRetrofit(Builder builder) {
         mConverter = builder.mConverter;
@@ -33,7 +33,7 @@ public class MqttRetrofit {
         return t;
     }
 
-    public MqttClient getClientMqttClient() {
+    public ClientMqttClient getClientMqttClient() {
         return mClientMqttClient;
     }
 
@@ -52,9 +52,9 @@ public class MqttRetrofit {
     public static final class Builder {
         private Converter.Factory mConverter;
         private CallAdapter.Factory mCallAdapter;
-        private MqttClient mClientMqttClient;
+        private ClientMqttClient mClientMqttClient;
 
-        public Builder setMqttClinet(MqttClient mqttClinet) {
+        public Builder setMqttClinet(ClientMqttClient mqttClinet) {
             checkNotNull(mqttClinet, "mqttClient = null");
             this.mClientMqttClient = mqttClinet;
             return this;
