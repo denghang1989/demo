@@ -2,6 +2,7 @@ package com.example.mqttretrofit;
 
 import com.example.mqttretrofit.annotation.Cmd;
 import com.example.mqttretrofit.annotation.Topic;
+import com.example.mqttretrofit.utlis.Utils;
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
@@ -54,6 +55,8 @@ public class ServiceMethod {
             for (Annotation methodAnnotation : methodAnnotations) {
                 parseMethodAnnotation(methodAnnotation);
             }
+            Utils.checkNotNull(cmd, method.getName() + "方法上面缺少@cmd注解");
+            Utils.checkNotNull(topic, method.getName() + "方法上面缺少@Topic注解");
             return new ServiceMethod(this);
         }
 
@@ -68,5 +71,19 @@ public class ServiceMethod {
         }
     }
 
+    public String getCmd() {
+        return cmd;
+    }
 
+    public void setCmd(String cmd) {
+        this.cmd = cmd;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
 }

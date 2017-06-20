@@ -21,12 +21,8 @@ class ServiceProxy implements InvocationHandler {
             return method.invoke(this, args);
         }
         ServiceMethod serviceMethod = loadServiceMethod(method);
-        String topic = serviceMethod.getTopic();
-        if (topic == null) {
-            throw new IllegalArgumentException(method.getName() + "方法上面缺少@Topic注解");
-        }
         MqttMessage message = serviceMethod.getMessage(args);
-        mMqttRetrofit.getClientMqttClient().publish(topic, message);
+        mMqttRetrofit.getClientMqttClient().publish(serviceMethod.getTopic(), message);
         return null;
     }
 
