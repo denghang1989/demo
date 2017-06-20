@@ -15,18 +15,6 @@
  */
 package com.example.mqttretrofit;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-
 public interface CallAdapter<T> {
-    Type responseType();
-
-    <R> T adapt(Call<R> call);
-
-    abstract class Factory {
-
-        public abstract CallAdapter<?> get(Type returnType, Annotation[] annotations,
-                                           MqttRetrofit retrofit);
-
-    }
+    T adapt(MqttCall<T> call);
 }

@@ -2,8 +2,11 @@ package com.example.mqttretrofit;
 
 import com.example.mqttretrofit.mqtt.ClientMqttClient;
 
+import org.eclipse.paho.client.mqttv3.MqttClient;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -15,9 +18,9 @@ import static com.example.mqttretrofit.utlis.Utils.checkNotNull;
 public class MqttRetrofit {
 
     private final Map<Method, ServiceMethod> serviceMethodCache = new LinkedHashMap<>();
-    private final Converter.Factory   mConverter;
-    private final CallAdapter.Factory mCallAdapter;
-    private final ClientMqttClient    mClientMqttClient;
+    private final Converter.Factory mConverter;
+    private final CallAdapter       mCallAdapter;
+    private final ClientMqttClient  mClientMqttClient;
 
     private MqttRetrofit(Builder builder) {
         mConverter = builder.mConverter;
@@ -33,26 +36,26 @@ public class MqttRetrofit {
         return t;
     }
 
-    public ClientMqttClient getClientMqttClient() {
-        return mClientMqttClient;
+    public MqttClient getMqttClient() {
+        return mClientMqttClient.getMqttClient();
     }
 
     public Map<Method, ServiceMethod> getServiceMethodCache() {
         return serviceMethodCache;
     }
 
-    public Converter.Factory getConverter() {
-        return mConverter;
+    public CallAdapter getCallAdapter() {
+        return mCallAdapter;
     }
 
-    public CallAdapter.Factory getCallAdapter() {
-        return mCallAdapter;
+    public Converter converter(Type actualType) {
+        return mConverter.getConverter(actualType);
     }
 
     public static final class Builder {
         private Converter.Factory   mConverter;
-        private CallAdapter.Factory mCallAdapter;
-        private ClientMqttClient          mClientMqttClient;
+        private CallAdapter mCallAdapter;
+        private ClientMqttClient    mClientMqttClient;
 
         public Builder setMqttClinet(ClientMqttClient mqttClinet) {
             checkNotNull(mqttClinet, "mqttClient = null");
@@ -65,7 +68,7 @@ public class MqttRetrofit {
             return this;
         }
 
-        public Builder setCallAdapterFactory(CallAdapter.Factory factory) {
+        public Builder setCallAdapterFactory(CallAdapter factory) {
             this.mCallAdapter = factory;
             return this;
         }

@@ -1,7 +1,5 @@
 package com.example.mqttretrofit;
 
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
@@ -21,8 +19,9 @@ public class ServiceProxy implements InvocationHandler {
             return method.invoke(this, args);
         }
         ServiceMethod serviceMethod = loadServiceMethod(method);
-        MqttMessage message = serviceMethod.getMessage(args);
-        return null;
+        Converter converter = mMqttRetrofit.converter(serviceMethod.actualType);
+        MqttCall mqttCall = new MqttCall(mMqttRetrofit,serviceMethod, converter, args);
+        return mMqttRetrofit.getCallAdapter().adapt(mqttCall);
     }
 
     private ServiceMethod loadServiceMethod(Method method) {
@@ -30,7 +29,7 @@ public class ServiceProxy implements InvocationHandler {
         synchronized (mMqttRetrofit.getServiceMethodCache()) {
             result = mMqttRetrofit.getServiceMethodCache().get(method);
             if (result == null) {
-                result = new ServiceMethod.Builder(mMqttRetrofit, method).build();
+                result = new ServiceMethod.Builder(method).build();
                 mMqttRetrofit.getServiceMethodCache().put(method, result);
             }
         }

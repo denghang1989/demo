@@ -4,51 +4,52 @@ import com.example.mqttretrofit.annotation.Cmd;
 import com.example.mqttretrofit.annotation.Topic;
 import com.example.mqttretrofit.utlis.Utils;
 
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 /**
  * @date 2017/6/20 11
  */
 public class ServiceMethod {
-    private MqttRetrofit mRetrofit;
-    private Method method;
-    private Annotation[] methodAnnotations;
-    private Annotation[][] parameterAnnotationsArray;
-    private String cmd;
-    private String topic;
-
+    private   Method         method;
+    private   Annotation[]   methodAnnotations;
+    private   Annotation[][] parameterAnnotationsArray;
+    private   String         cmd;
+    private   String         topic;
+    protected Type           actualType; //MqttCall<?> 里面的type
 
     public ServiceMethod(Builder builder) {
-        mRetrofit = builder.mRetrofit;
         method = builder.method;
         methodAnnotations = builder.methodAnnotations;
         parameterAnnotationsArray = builder.parameterAnnotationsArray;
         this.cmd = builder.cmd;
         this.topic = builder.topic;
-    }
-
-
-    public MqttMessage getMessage(Object[] args) {
-        return null;
+        this.actualType = builder.actualType;
     }
 
     public static final class Builder {
-        final MqttRetrofit mRetrofit;
-        final Method method;
-        final Annotation[] methodAnnotations;
-        final Annotation[][] parameterAnnotationsArray;
-        private String cmd;
-        private String topic;
+        final     Method         method;
+        final     Annotation[]   methodAnnotations;
+        final     Annotation[][] parameterAnnotationsArray;
+        protected Type           actualType;
+        protected Type           returnType;
+        private   String         cmd;
+        private   String         topic;
 
 
-        public Builder(MqttRetrofit retrofit, Method method) {
-            this.mRetrofit = retrofit;
+        public Builder(Method method) {
             this.method = method;
             this.methodAnnotations = method.getAnnotations();
             this.parameterAnnotationsArray = method.getParameterAnnotations();
+            this.returnType = method.getGenericReturnType();
+            if (returnType instanceof ParameterizedType) {
+                Type[] arguments = ((ParameterizedType) returnType).getActualTypeArguments();
+                actualType = arguments[0];
+            } else {
+                actualType = returnType;
+            }
         }
 
         public ServiceMethod build() {

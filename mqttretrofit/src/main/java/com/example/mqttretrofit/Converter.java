@@ -16,17 +16,12 @@
 package com.example.mqttretrofit;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-public interface Converter<F, T> {
-    T convert(F value) throws IOException;
+public interface Converter<T> {
+    T convert(String value) throws IOException;
 
     abstract class Factory {
-
-        public Converter<String, ?> stringConverter(Type type, Annotation[] annotations,
-                                                    MqttRetrofit retrofit) {
-            return null;
-        }
+        public abstract Converter getConverter(Type type);
     }
 }

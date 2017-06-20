@@ -32,6 +32,10 @@ public class ClientMqttClient {
         return mCallbackMap;
     }
 
+    public MqttClient getMqttClient() {
+        return mqttClient;
+    }
+
     /**
      * @param mobile
      * @param useId
