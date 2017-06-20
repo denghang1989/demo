@@ -1,13 +1,22 @@
 package com.example.llf.test;
 
 import android.app.Activity;
+import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.ContentProvider;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,5 +76,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startJumpActivity(Class<? extends Activity> activity) {
         startActivity(new Intent(this, activity));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: " + this.getClassLoader());
+        Log.d(TAG, "onResume: " + getApplicationContext().getClassLoader());
+        Log.d(TAG, "onResume: " + List.class.getClassLoader());
+        Log.d(TAG, "onResume: " + ListView.class.getClassLoader());
+        Log.d(TAG, "onResume: " + TextUtils.class.getClassLoader());
+        Log.d(TAG, "onResume: " + Activity.class.getClassLoader());
+        Log.d(TAG, "onResume: " + BroadcastReceiver.class.getClassLoader());
+        Log.d(TAG, "onResume: " + Service.class.getClassLoader());
+        Log.d(TAG, "onResume: " + ContentProvider.class.getClassLoader());
     }
 }

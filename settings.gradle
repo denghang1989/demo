@@ -1,1 +1,1 @@
-include ':app', ':databinding_demo'
+include ':app', ':databinding_demo', ':mqttretrofit'

@@ -1,13 +1,14 @@
 package com.example.databinding_demo;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.example.databinding_demo.findview.SimpleDataBinding02Activity;
 import com.example.databinding_demo.findview.SimpleDataBindingActivity;
 import com.example.databinding_demo.simple_data.SimpleDataActivity;
+import com.example.databinding_demo.simple_image.SimpleImageActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, SimpleDataActivity.class));
                 break;
             case R.id.button4:
+                startActivity(new Intent(this, SimpleImageActivity.class));
                 break;
             case R.id.button5:
                 break;
