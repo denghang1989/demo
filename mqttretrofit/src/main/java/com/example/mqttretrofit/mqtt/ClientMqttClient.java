@@ -1,37 +1,39 @@
-package com.example.mqttretrofit.devicebusiness.devicemqtt;
+package com.example.mqttretrofit.mqtt;
 
 import com.example.mqttretrofit.Callback;
-import com.example.mqttretrofit.ServiceMethod;
 import com.example.mqttretrofit.utlis.MD5Utils;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ClientMqttClient {
-
-    private MqttClient mqttClient;
-    private MqttConnection mqttConnection;
+    private final Map<String, Callback<?>> mCallbackMap = new LinkedHashMap<>();
+    private        MqttClient       mqttClient;
+    private        MqttConnection   mqttConnection;
     private static ClientMqttClient instance;
-    private static ClientCallback handler;
 
     private ClientMqttClient(MqttConnection connection) {
         this.mqttConnection = connection;
         try {
             mqttClient = new MqttClient(mqttConnection.baseUrl, mqttConnection.userId + "_2", new MemoryPersistence());
-            mqttClient.setCallback(handler = new ClientCallback());
+            mqttClient.setCallback(new ClientCallback(mCallbackMap));
             connect();
         } catch (MqttException e) {
             e.printStackTrace();
         }
     }
 
-    public Map<String, Callback> getMapCallback() {
-        return handler.getCallbackMap();
+    public Map<String, Callback<?>> getCallbackMap() {
+        return mCallbackMap;
+    }
+
+    public MqttClient getMqttClient() {
+        return mqttClient;
     }
 
     /**
@@ -61,15 +63,6 @@ public class ClientMqttClient {
         }
     }
 
-    public void publish(String topicName, String msg) {
-        try {
-            MqttMessage message = new MqttMessage(msg.getBytes());
-            mqttClient.getTopic(topicName).publish(message);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     public void disConnect() {
         if (mqttClient != null && mqttClient.isConnected()) {
             try {
@@ -86,11 +79,7 @@ public class ClientMqttClient {
         instance = null;
     }
 
-    public void publish(ServiceMethod serviceMethod, Object[] args) {
-
-    }
-
-    static class MqttConnection {
+    private static class MqttConnection {
         final String userId;
         final String baseUrl;
         final char[] password;
@@ -101,7 +90,7 @@ public class ClientMqttClient {
         public MqttConnection(String mobile, String userId, String baseUrl) {
             this.userId = userId;
             this.baseUrl = baseUrl;
-            password = MD5Utils.getMd5(mobile).toCharArray();
+            this.password = MD5Utils.getMd5(mobile).toCharArray();
             this.mqttConnectOptions.setUserName(mobile);
             this.mqttConnectOptions.setPassword(password);
             this.mqttConnectOptions.setConnectionTimeout(0);
