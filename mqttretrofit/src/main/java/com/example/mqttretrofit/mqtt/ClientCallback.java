@@ -11,19 +11,15 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Map;
 
 public class ClientCallback implements MqttCallback {
-    private final Map<String, Callback<?>> mCallbackMap;
+    private final Map<String, Argument> mCallbackMap;
     private final Platform platform = Platform.get();
-    private Converter mConverter;
 
-    public ClientCallback(Map<String, Callback<?>> callbackMap) {
+    public ClientCallback(Map<String, Argument> callbackMap) {
         this.mCallbackMap = callbackMap;
-    }
-
-    public void setConverter(Converter converter) {
-        this.mConverter = converter;
     }
 
     @Override
@@ -33,10 +29,31 @@ public class ClientCallback implements MqttCallback {
 
     @Override
     public void messageArrived(@Nullable String topic, MqttMessage message) throws Exception {
-        String content = new String(message.getPayload());
+        final String content = new String(message.getPayload());
         JSONObject jsonObject = new JSONObject(content);
         String cmd = jsonObject.optString("cmd");
-        Callback callback = mCallbackMap.get(cmd);
+        Argument argument = mCallbackMap.get(cmd);
+        if (argument != null) {
+            final Callback callback = argument.getCallback();
+            Converter converter = argument.getConverter();
+            try {
+                final Object convert = converter.convert(content);
+                platform.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onSuccess(convert);
+                    }
+                });
+            } catch (final IOException e) {
+                e.printStackTrace();
+                platform.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onError(e);
+                    }
+                });
+            }
+        }
 
     }
 

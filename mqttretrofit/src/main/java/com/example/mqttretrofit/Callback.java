@@ -5,7 +5,7 @@ package com.example.mqttretrofit;
  */
 public interface Callback<T> {
 
-    void onResponse(T t);
+    void onSuccess(T t);
 
-    void onFailure(Throwable t);
+    void onError(Throwable t);
 }

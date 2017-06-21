@@ -20,7 +20,7 @@ public class ServiceProxy implements InvocationHandler {
         }
         ServiceMethod serviceMethod = loadServiceMethod(method,args);
         Converter converter = mMqttRetrofit.converter(serviceMethod.actualType);
-        MqttCall mqttCall = new MqttCall(mMqttRetrofit, serviceMethod);
+        MqttCall mqttCall = new MqttCall(mMqttRetrofit, serviceMethod,converter);
         return mMqttRetrofit.getCallAdapter().adapt(mqttCall);
     }
 

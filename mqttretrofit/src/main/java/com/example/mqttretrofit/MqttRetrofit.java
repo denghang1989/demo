@@ -1,5 +1,6 @@
 package com.example.mqttretrofit;
 
+import com.example.mqttretrofit.mqtt.Argument;
 import com.example.mqttretrofit.mqtt.ClientMqttClient;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -53,7 +54,7 @@ public class MqttRetrofit {
         return mConverter.getConverter(actualType);
     }
 
-    public Map<String, Callback<?>> getCallbackMap() {
+    public Map<String, Argument> getCallbackMap() {
         return mClientMqttClient.getCallbackMap();
     }
 

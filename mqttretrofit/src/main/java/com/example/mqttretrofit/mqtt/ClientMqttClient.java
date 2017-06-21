@@ -1,6 +1,5 @@
 package com.example.mqttretrofit.mqtt;
 
-import com.example.mqttretrofit.Callback;
 import com.example.mqttretrofit.utlis.MD5Utils;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -12,7 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ClientMqttClient {
-    private final Map<String, Callback<?>> mCallbackMap = new LinkedHashMap<>();
+    private final Map<String, Argument> mCallbackMap = new LinkedHashMap<>();
     private static ClientMqttClient instance;
     private MqttClient mqttClient;
     private MqttConnection mqttConnection;
@@ -29,7 +28,7 @@ public class ClientMqttClient {
         }
     }
 
-    public Map<String, Callback<?>> getCallbackMap() {
+    public Map<String, Argument> getCallbackMap() {
         return mCallbackMap;
     }
 
