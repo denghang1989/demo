@@ -13,15 +13,16 @@ import java.util.Map;
 
 public class ClientMqttClient {
     private final Map<String, Callback<?>> mCallbackMap = new LinkedHashMap<>();
-    private        MqttClient       mqttClient;
-    private        MqttConnection   mqttConnection;
     private static ClientMqttClient instance;
+    private MqttClient mqttClient;
+    private MqttConnection mqttConnection;
+    private ClientCallback mClientCallback;
 
     private ClientMqttClient(MqttConnection connection) {
         this.mqttConnection = connection;
         try {
             mqttClient = new MqttClient(mqttConnection.baseUrl, mqttConnection.userId + "_2", new MemoryPersistence());
-            mqttClient.setCallback(new ClientCallback(mCallbackMap));
+            mqttClient.setCallback(mClientCallback = new ClientCallback(mCallbackMap));
             connect();
         } catch (MqttException e) {
             e.printStackTrace();

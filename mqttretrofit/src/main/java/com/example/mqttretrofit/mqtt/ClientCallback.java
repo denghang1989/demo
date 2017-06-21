@@ -3,6 +3,7 @@ package com.example.mqttretrofit.mqtt;
 import android.support.annotation.Nullable;
 
 import com.example.mqttretrofit.Callback;
+import com.example.mqttretrofit.Converter;
 import com.example.mqttretrofit.Platform;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -15,9 +16,14 @@ import java.util.Map;
 public class ClientCallback implements MqttCallback {
     private final Map<String, Callback<?>> mCallbackMap;
     private final Platform platform = Platform.get();
+    private Converter mConverter;
 
     public ClientCallback(Map<String, Callback<?>> callbackMap) {
         this.mCallbackMap = callbackMap;
+    }
+
+    public void setConverter(Converter converter) {
+        this.mConverter = converter;
     }
 
     @Override

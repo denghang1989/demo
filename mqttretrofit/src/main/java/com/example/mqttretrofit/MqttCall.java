@@ -1,25 +1,31 @@
 package com.example.mqttretrofit;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
+
+import java.util.Map;
 
 /**
  * 2017/6/20 22
  */
 public class MqttCall<T> implements Call<T> {
     private ServiceMethod mServiceMethod;
-    private MqttClient    client;
-    private Converter     converter;
-    private Object[]      args;
+    private MqttClient client;
+    private Map<String, Callback<?>> mCallbackMap;
 
-    public MqttCall(MqttRetrofit mqttRetrofit, ServiceMethod serviceMethod, Converter converter, Object[] args) {
+    public MqttCall(MqttRetrofit mqttRetrofit, ServiceMethod serviceMethod) {
         this.mServiceMethod = serviceMethod;
-        this.converter = converter;
-        this.args = args;
         this.client = mqttRetrofit.getMqttClient();
+        this.mCallbackMap = mqttRetrofit.getCallbackMap();
     }
 
     @Override
     public void enqueue(Callback<T> callback) {
-
+        try {
+            mCallbackMap.put(mServiceMethod.getCmd() + "_resp", callback);
+            client.publish(mServiceMethod.getTopic(), mServiceMethod.getMessage());
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
     }
 }

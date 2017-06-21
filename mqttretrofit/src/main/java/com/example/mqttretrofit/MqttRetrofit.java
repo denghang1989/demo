@@ -32,6 +32,7 @@ public class MqttRetrofit {
         if (!clazz.isInterface()) {
             throw new IllegalArgumentException();
         }
+
         T t = (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new ServiceProxy(this));
         return t;
     }
@@ -50,6 +51,10 @@ public class MqttRetrofit {
 
     public Converter converter(Type actualType) {
         return mConverter.getConverter(actualType);
+    }
+
+    public Map<String, Callback<?>> getCallbackMap() {
+        return mClientMqttClient.getCallbackMap();
     }
 
     public static final class Builder {

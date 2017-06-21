@@ -18,18 +18,18 @@ public class ServiceProxy implements InvocationHandler {
         if (method.getDeclaringClass() == Object.class) {
             return method.invoke(this, args);
         }
-        ServiceMethod serviceMethod = loadServiceMethod(method);
+        ServiceMethod serviceMethod = loadServiceMethod(method,args);
         Converter converter = mMqttRetrofit.converter(serviceMethod.actualType);
-        MqttCall mqttCall = new MqttCall(mMqttRetrofit,serviceMethod, converter, args);
+        MqttCall mqttCall = new MqttCall(mMqttRetrofit, serviceMethod);
         return mMqttRetrofit.getCallAdapter().adapt(mqttCall);
     }
 
-    private ServiceMethod loadServiceMethod(Method method) {
+    private ServiceMethod loadServiceMethod(Method method, Object[] args) {
         ServiceMethod result;
         synchronized (mMqttRetrofit.getServiceMethodCache()) {
             result = mMqttRetrofit.getServiceMethodCache().get(method);
             if (result == null) {
-                result = new ServiceMethod.Builder(method).build();
+                result = new ServiceMethod.Builder(method,args).build();
                 mMqttRetrofit.getServiceMethodCache().put(method, result);
             }
         }
