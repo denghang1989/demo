@@ -3,7 +3,7 @@ package com.example.mqttretrofit.mqtt;
 import android.support.annotation.Nullable;
 
 import com.example.mqttretrofit.Callback;
-import com.example.mqttretrofit.Converter;
+import com.example.mqttretrofit.converter.Converter;
 import com.example.mqttretrofit.Platform;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;

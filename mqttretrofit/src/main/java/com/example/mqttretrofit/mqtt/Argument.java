@@ -1,7 +1,7 @@
 package com.example.mqttretrofit.mqtt;
 
 import com.example.mqttretrofit.Callback;
-import com.example.mqttretrofit.Converter;
+import com.example.mqttretrofit.converter.Converter;
 
 /**
  * @date 2017/6/21 10

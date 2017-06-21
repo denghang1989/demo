@@ -1,5 +1,7 @@
 package com.example.mqttretrofit;
 
+import com.example.mqttretrofit.converter.Converter;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
@@ -21,7 +23,7 @@ public class ServiceProxy implements InvocationHandler {
         ServiceMethod serviceMethod = loadServiceMethod(method,args);
         Converter converter = mMqttRetrofit.converter(serviceMethod.actualType);
         MqttCall mqttCall = new MqttCall(mMqttRetrofit, serviceMethod,converter);
-        return mMqttRetrofit.getCallAdapter().adapt(mqttCall);
+        return mqttCall;
     }
 
     private ServiceMethod loadServiceMethod(Method method, Object[] args) {

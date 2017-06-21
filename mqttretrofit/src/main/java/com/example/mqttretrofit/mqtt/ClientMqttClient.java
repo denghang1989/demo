@@ -15,13 +15,12 @@ public class ClientMqttClient {
     private static ClientMqttClient instance;
     private MqttClient mqttClient;
     private MqttConnection mqttConnection;
-    private ClientCallback mClientCallback;
 
     private ClientMqttClient(MqttConnection connection) {
         this.mqttConnection = connection;
         try {
             mqttClient = new MqttClient(mqttConnection.baseUrl, mqttConnection.userId + "_2", new MemoryPersistence());
-            mqttClient.setCallback(mClientCallback = new ClientCallback(mCallbackMap));
+            mqttClient.setCallback(new ClientCallback(mCallbackMap));
             connect();
         } catch (MqttException e) {
             e.printStackTrace();

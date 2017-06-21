@@ -1,5 +1,6 @@
 package com.example.mqttretrofit;
 
+import com.example.mqttretrofit.converter.Converter;
 import com.example.mqttretrofit.mqtt.Argument;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -26,7 +27,8 @@ public class MqttCall<T> implements Call<T> {
     @Override
     public void enqueue(Callback<T> callback) {
         try {
-            mCallbackMap.put(mServiceMethod.getCmd() + "_resp", new Argument(converter, callback));
+            Argument<T> argument = new Argument(converter, callback);
+            mCallbackMap.put(mServiceMethod.getCmd() + "_resp", argument);
             client.publish(mServiceMethod.getTopic(), mServiceMethod.getMessage());
         } catch (MqttException e) {
             e.printStackTrace();
