@@ -12,9 +12,9 @@ import java.util.Map;
  * 2017/6/20 22
  */
 public class MqttCall<T> implements Call<T> {
-    private final Converter converter;
+    private final Converter converter; //解析器
     private final ServiceMethod mServiceMethod;
-    private final MqttClient client;
+    private final MqttClient client; //真实的发送请求的对象
     private final Map<String, Argument> mCallbackMap;
 
     public MqttCall(MqttRetrofit mqttRetrofit, ServiceMethod serviceMethod, Converter converter) {

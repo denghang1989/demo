@@ -17,6 +17,7 @@ import java.lang.reflect.Type;
 public class ServiceMethod {
     private Method method;
     private Annotation[][] parameterAnnotationsArray;
+    private Object[] args;
     private String cmd;
     private String topic;
     protected Type actualType; //MqttCall<?> 里面的type
@@ -27,6 +28,7 @@ public class ServiceMethod {
         this.cmd = builder.cmd;
         this.topic = builder.topic;
         this.actualType = builder.actualType;
+        this.args = builder.args;
     }
 
     public MqttMessage getMessage() {

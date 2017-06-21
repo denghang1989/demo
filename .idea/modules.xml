@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/databinding_demo/databinding_demo.iml" filepath="$PROJECT_DIR$/databinding_demo/databinding_demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/demo.iml" filepath="$PROJECT_DIR$/demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/mqttretrofit/mqttretrofit.iml" filepath="$PROJECT_DIR$/mqttretrofit/mqttretrofit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test_mqtt/test_mqtt.iml" filepath="$PROJECT_DIR$/test_mqtt/test_mqtt.iml" />
     </modules>
   </component>
 </project>

@@ -16,12 +16,11 @@ public class ClientMqttClient {
     private MqttClient mqttClient;
     private MqttConnection mqttConnection;
 
-    private ClientMqttClient(MqttConnection connection) {
-        this.mqttConnection = connection;
+    private ClientMqttClient(String mobile, String userId, String baseUrl) {
         try {
+            mqttConnection = new MqttConnection(mobile, userId, baseUrl);
             mqttClient = new MqttClient(mqttConnection.baseUrl, mqttConnection.userId + "_2", new MemoryPersistence());
             mqttClient.setCallback(new ClientCallback(mCallbackMap));
-            connect();
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -35,15 +34,10 @@ public class ClientMqttClient {
         return mqttClient;
     }
 
-    /**
-     * @param mobile
-     * @param useId
-     * @param baseUrl
-     * @return
-     */
-    public static ClientMqttClient getInstance(String mobile, String useId, String baseUrl) {
-        if (instance == null)
-            instance = new ClientMqttClient(new MqttConnection(mobile, useId, baseUrl));
+    public static ClientMqttClient getInstance(String mobile, String userId, String baseUrl) {
+        if (instance == null) {
+            instance = new ClientMqttClient(mobile, userId, baseUrl);
+        }
         return instance;
     }
 
@@ -78,24 +72,36 @@ public class ClientMqttClient {
         instance = null;
     }
 
-    private static class MqttConnection {
+    public static class MqttConnection {
         final String userId;
         final String baseUrl;
-        final char[] password;
+        final String mobile;
         final int qos = 1;
         final String subscriptionTopic;
         final MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
 
         public MqttConnection(String mobile, String userId, String baseUrl) {
+            this.mobile = mobile;
             this.userId = userId;
             this.baseUrl = baseUrl;
-            this.password = MD5Utils.getMd5(mobile).toCharArray();
             this.mqttConnectOptions.setUserName(mobile);
-            this.mqttConnectOptions.setPassword(password);
+            this.mqttConnectOptions.setPassword(MD5Utils.getMd5(mobile).toCharArray());
             this.mqttConnectOptions.setConnectionTimeout(0);
             this.mqttConnectOptions.setCleanSession(false);
             this.mqttConnectOptions.setAutomaticReconnect(true);
             this.subscriptionTopic = "cloudring/user/" + userId;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public String getBaseUrl() {
+            return baseUrl;
+        }
+
+        public String getMobile() {
+            return mobile;
         }
     }
 
