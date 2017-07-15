@@ -23,8 +23,8 @@ public class ServiceMethod {
     protected Type actualType; //MqttCall<?> 里面的type
 
     public ServiceMethod(Builder builder) {
-        method = builder.method;
-        parameterAnnotationsArray = builder.parameterAnnotationsArray;
+        this.method = builder.method;
+        this.parameterAnnotationsArray = builder.parameterAnnotationsArray;
         this.cmd = builder.cmd;
         this.topic = builder.topic;
         this.actualType = builder.actualType;
@@ -32,7 +32,13 @@ public class ServiceMethod {
     }
 
     public MqttMessage getMessage() {
+        // TODO: 2017/7/14  处理参数 返回json对象
         MqttMessage mqttMessage = new MqttMessage();
+        for (int i = 0; i < args.length; i++) {
+            if (args[i] instanceof String) {
+                mqttMessage.setPayload(((String) args[i]).getBytes());
+            }
+        }
         return mqttMessage;
     }
 

@@ -7,9 +7,6 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
-/**
- * Created by kkmike999 on 2016/06/04.
- */
 public class GsonConverter<T> implements Converter {
 
 	TypeAdapter adapter;

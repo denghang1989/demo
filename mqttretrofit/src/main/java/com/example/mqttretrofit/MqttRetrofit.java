@@ -1,6 +1,7 @@
 package com.example.mqttretrofit;
 
 import com.example.mqttretrofit.converter.Converter;
+import com.example.mqttretrofit.converter.GsonConverterFactory;
 import com.example.mqttretrofit.mqtt.Argument;
 import com.example.mqttretrofit.mqtt.ClientMqttClient;
 
@@ -20,14 +21,17 @@ import static com.example.mqttretrofit.utlis.Utils.checkNotNull;
 public class MqttRetrofit {
 
     private final Map<Method, ServiceMethod> serviceMethodCache = new LinkedHashMap<>();
-    private final Converter.Factory mConverter;
-    private final CallAdapter       mCallAdapter;
-    private final ClientMqttClient  mClientMqttClient;
+    private Converter.Factory mConverter;
+    private CallAdapter mCallAdapter;
+    private ClientMqttClient mClientMqttClient;
 
     private MqttRetrofit(Builder builder) {
         mConverter = builder.mConverter;
         mCallAdapter = builder.mCallAdapter;
         mClientMqttClient = builder.mClientMqttClient;
+        if (mConverter == null) {
+            mConverter = new GsonConverterFactory();
+        }
     }
 
     public <T> T create(Class<T> clazz) {
@@ -60,9 +64,9 @@ public class MqttRetrofit {
     }
 
     public static final class Builder {
-        private Converter.Factory   mConverter;
+        private Converter.Factory mConverter;
         private CallAdapter mCallAdapter;
-        private ClientMqttClient    mClientMqttClient;
+        private ClientMqttClient mClientMqttClient;
 
         public Builder setMqttClinet(ClientMqttClient mqttClinet) {
             checkNotNull(mqttClinet, "mqttClient = null");

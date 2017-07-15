@@ -4,9 +4,6 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
 
-/**
- * Created by kkmike999 on 2016/06/05.
- */
 public class GsonConverterFactory extends Converter.Factory {
 
     Gson gson;

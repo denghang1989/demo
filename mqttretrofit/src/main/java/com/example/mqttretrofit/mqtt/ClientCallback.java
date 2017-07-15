@@ -1,10 +1,11 @@
 package com.example.mqttretrofit.mqtt;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.example.mqttretrofit.Callback;
-import com.example.mqttretrofit.converter.Converter;
 import com.example.mqttretrofit.Platform;
+import com.example.mqttretrofit.converter.Converter;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public class ClientCallback implements MqttCallback {
+    private static final String TAG = "ClientCallback";
     private final Map<String, Argument> mCallbackMap;
     private final Platform platform = Platform.get();
 
@@ -30,6 +32,7 @@ public class ClientCallback implements MqttCallback {
     @Override
     public void messageArrived(@Nullable String topic, MqttMessage message) throws Exception {
         final String content = new String(message.getPayload());
+        Log.d(TAG, "messageArrived: "+content);
         JSONObject jsonObject = new JSONObject(content);
         String cmd = jsonObject.optString("cmd");
         Argument argument = mCallbackMap.get(cmd);
