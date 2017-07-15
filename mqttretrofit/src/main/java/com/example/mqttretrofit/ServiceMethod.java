@@ -16,7 +16,6 @@ import java.lang.reflect.Type;
  */
 public class ServiceMethod {
     private Method method;
-    private Annotation[][] parameterAnnotationsArray;
     private Object[] args;
     private String cmd;
     private String topic;
@@ -24,7 +23,6 @@ public class ServiceMethod {
 
     public ServiceMethod(Builder builder) {
         this.method = builder.method;
-        this.parameterAnnotationsArray = builder.parameterAnnotationsArray;
         this.cmd = builder.cmd;
         this.topic = builder.topic;
         this.actualType = builder.actualType;
@@ -71,6 +69,10 @@ public class ServiceMethod {
             for (Annotation methodAnnotation : methodAnnotations) {
                 parseMethodAnnotation(methodAnnotation);
             }
+            if (!(returnType instanceof Call)) {
+
+            }
+
             Utils.checkNotNull(cmd, method.getName() + "方法上面缺少@cmd注解");
             Utils.checkNotNull(topic, method.getName() + "方法上面缺少@Topic注解");
             return new ServiceMethod(this);
