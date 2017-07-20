@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * @date 2017/6/20 11
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target(ElementType.METHOD)
 public @interface Cmd {
     String value();
 }

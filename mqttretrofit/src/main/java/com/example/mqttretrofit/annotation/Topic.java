@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * @date 2017/6/20 11
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target(ElementType.METHOD)
 public @interface Topic {
     String value() default "cloudring/server/user/1.0/cn/";
 }

@@ -1,37 +1,34 @@
 package com.example.mqttretrofit;
 
-import com.example.mqttretrofit.converter.Converter;
-import com.example.mqttretrofit.mqtt.Argument;
+import android.support.annotation.Nullable;
 
-import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
-
-import java.util.Map;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
  * 2017/6/20 22
  */
 public class MqttCall<T> implements Call<T> {
-    private final Converter converter; //解析器
-    private final ServiceMethod mServiceMethod;
-    private final MqttClient client; //真实的发送请求的对象
-    private final Map<String, Argument> mCallbackMap;
+    private final ServiceMethod<T, ?> serviceMethod;
+    private final Object[] args;
+    private final MqttRetrofit mMqttRetrofit;
 
-    public MqttCall(MqttRetrofit mqttRetrofit, ServiceMethod serviceMethod, Converter converter) {
-        this.mServiceMethod = serviceMethod;
-        this.client = mqttRetrofit.getMqttClient();
-        this.mCallbackMap = mqttRetrofit.getCallbackMap();
-        this.converter = converter;
+    public MqttCall(ServiceMethod<T, ?> serviceMethod, @Nullable Object[] args, MqttRetrofit mqttClient) {
+        this.serviceMethod = serviceMethod;
+        this.mMqttRetrofit = mqttClient;
+        this.args = args;
     }
 
     @Override
     public void enqueue(Callback<T> callback) {
+        String cmd = serviceMethod.getCmd();
+        String topic = serviceMethod.getTopic();
+        MqttMessage mqttMessage = new MqttMessage();
         try {
-            Argument<T> argument = new Argument(converter, callback);
-            mCallbackMap.put(mServiceMethod.getCmd() + "_resp", argument);
-            client.publish(mServiceMethod.getTopic(), mServiceMethod.getMessage());
+            mMqttRetrofit.getMqttClient().publish(topic, mqttMessage);
         } catch (MqttException e) {
             e.printStackTrace();
         }
+
     }
 }
