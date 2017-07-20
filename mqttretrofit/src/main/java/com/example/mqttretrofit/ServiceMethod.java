@@ -21,40 +21,57 @@ import java.util.Map;
  * @date 2017/6/20 11
  */
 public class ServiceMethod<R, T> {
-    private HashMap<String, String> mParameterMap = new HashMap<>();
     private String cmd;
     private String topic;
-    protected Type actualType; //MqttCall<?> 里面的type
     final CallAdapter<R, T> mCallAdapter;
+    Converter<String, R> responseConverter;
+    final ParameterHandler<?>[] parameterHandlers;
+    private MqttRetrofit mMqttRetrofit;
 
-    public ServiceMethod(Builder builder) {
+    public ServiceMethod(Builder<R, T> builder) {
         this.cmd = builder.cmd;
         this.topic = builder.topic;
-        this.actualType = builder.actualType;
         this.mCallAdapter = builder.mCallAdapter;
+        this.responseConverter = builder.responseConverter;
+        this.parameterHandlers = builder.parameterHandlers;
+        this.mMqttRetrofit = builder.mMqttRetrofit;
     }
 
-    public static final class Builder<T, R> {
-        final Method method;
-        final Annotation[] methodAnnotations;
-        final Annotation[][] parameterAnnotationsArray;
-        final Type[] parameterTypes; //参数类型 （java8 可以使用Parameter.java 一个类全部搞定）
+    @SuppressWarnings("unchecked")
+    public String toRequest(Object[] args) {
+        Map<String, String> requestMap = new HashMap<>();
+        int argumentCount = args != null ? args.length : 0;
+        ParameterHandler<Object>[] handlers = (ParameterHandler<Object>[]) parameterHandlers;
+        if (argumentCount != handlers.length) {
+            throw new IllegalArgumentException("Argument count (" + argumentCount
+                    + ") doesn't match expected count (" + handlers.length + ")");
+        }
+        for (int p = 0; p < argumentCount; p++) {
+            handlers[p].apply(requestMap, args[p]);
+        }
+        return mMqttRetrofit.mapToString(requestMap);
+    }
 
-        CallAdapter<T, R> mCallAdapter;
-        Converter<String, T> responseConverter;
-        ParameterHandler<?>[] parameterHandlers;
-        protected Type actualType;
+    public final class Builder<R, T> {
         private String cmd;
         private String topic;
+        final Method method;
+        final Annotation[] methodAnnotations; // 方法注解 必须制定（cmd，topic）
+        final Annotation[][] parameterAnnotationsArray; //parameter注解 返回2位数组，可能有多个注解
+        final Type[] parameterTypes; //parameter 数据类型 （java8 可以使用Parameter.java 一个类全部搞定）
+
+        CallAdapter<R, T> mCallAdapter; //返回数据类型的适配器
+        Converter<String, R> responseConverter; //数据解析工厂
+        ParameterHandler<?>[] parameterHandlers; //parameter 注解处理包装类
         private MqttRetrofit mMqttRetrofit;
-        Type responseType;
+        Type responseType; // 返回值数据类型 （默认 Call<?>）
 
         public Builder(MqttRetrofit mqttRetrofit, Method method) {
-            this.mMqttRetrofit = mqttRetrofit;
-            this.method = method;
-            this.methodAnnotations = method.getAnnotations();
-            this.parameterAnnotationsArray = method.getParameterAnnotations();
-            this.parameterTypes = method.getGenericParameterTypes();
+            this.mMqttRetrofit = mqttRetrofit; //retrofit
+            this.method = method; //方法
+            this.methodAnnotations = method.getAnnotations(); // 方法注解
+            this.parameterAnnotationsArray = method.getParameterAnnotations(); //parameter注解
+            this.parameterTypes = method.getGenericParameterTypes(); //parameter 数据类型
         }
 
         public ServiceMethod build() {
@@ -105,19 +122,19 @@ public class ServiceMethod<R, T> {
             return result;
         }
 
-        private ParameterHandler<?> parseParameterAnnotation(int i, Type type, Annotation[] annotations, Annotation annotation) {
+        private ParameterHandler<?> parseParameterAnnotation(int i, Type parameterType, Annotation[] annotations, Annotation annotation) {
             if (annotation instanceof Query) {
                 Query query = (Query) annotation;
                 String name = query.value();
-                Class<?> rawParameterType = Utils.getRawType(type);
+                Class<?> rawParameterType = Utils.getRawType(parameterType);
                 if (Iterable.class.isAssignableFrom(rawParameterType)) {
-                    if (!(type instanceof ParameterizedType)) {
+                    if (!(parameterType instanceof ParameterizedType)) {
                         throw parameterError(i, rawParameterType.getSimpleName()
-                                + " must include generic type (e.g., "
+                                + " must include generic parameterType (e.g., "
                                 + rawParameterType.getSimpleName()
                                 + "<String>)");
                     }
-                    ParameterizedType parameterizedType = (ParameterizedType) type;
+                    ParameterizedType parameterizedType = (ParameterizedType) parameterType;
                     Type iterableType = Utils.getParameterUpperBound(0, parameterizedType);
                     Converter<?, String> converter = mMqttRetrofit.stringConverter(iterableType, annotations);
                     return new ParameterHandler.Query<>(name, converter).iterable();
@@ -126,35 +143,39 @@ public class ServiceMethod<R, T> {
                     Converter<?, String> converter = mMqttRetrofit.stringConverter(arrayComponentType, annotations);
                     return new ParameterHandler.Query<>(name, converter).array();
                 } else {
-                    Converter<?, String> converter = mMqttRetrofit.stringConverter(type, annotations);
+                    Converter<?, String> converter = mMqttRetrofit.stringConverter(parameterType, annotations);
                     return new ParameterHandler.Query<>(name, converter);
                 }
 
             } else if (annotation instanceof QueryMap) {
-                Class<?> rawParameterType = Utils.getRawType(type);
+                Class<?> rawParameterType = Utils.getRawType(parameterType);
                 if (!Map.class.isAssignableFrom(rawParameterType)) {
-                    throw parameterError(i, "@QueryMap parameter type must be Map.");
+                    throw parameterError(i, "@QueryMap parameter parameterType must be Map.");
                 }
-                Type mapType = Utils.getSupertype(type, rawParameterType, Map.class);
+                Type mapType = Utils.getSupertype(parameterType, rawParameterType, Map.class);
                 if (!(mapType instanceof ParameterizedType)) {
                     throw parameterError(i, "Map must include generic types (e.g., Map<String, String>)");
                 }
+                Type[] actualTypeArguments = ((ParameterizedType) mapType).getActualTypeArguments();
+                if (!actualTypeArguments[0].equals(String.class) && !actualTypeArguments[1].equals(String.class)) {
+                    throw parameterError(i, "Map must Map<String, String>");
+                }
                 return new ParameterHandler.QueryMap<>();
             } else if (annotation instanceof Body) {
-                Converter<?, Map<String,String>> converter;
+                Converter<?, String> converter;
                 try {
-                    converter = mMqttRetrofit.requestBodyConverter(type, annotations, methodAnnotations);
+                    converter = mMqttRetrofit.requestBodyConverter(parameterType, annotations, methodAnnotations);
                 } catch (RuntimeException e) {
                     // Wide exception range because factories are user code.
-                    throw parameterError(i, "Unable to create @Body converter for %s", type);
+                    throw parameterError(i, "Unable to create @Body converter for %s", parameterType);
                 }
-                return new ParameterHandler.Body<>(converter);
+                return new ParameterHandler.Body<>(parameterType,converter);
             }
 
             return null;
         }
 
-        private Converter<String, T> createResponseConverter() {
+        private Converter<String, R> createResponseConverter() {
             Annotation[] annotations = method.getAnnotations();
             try {
                 return mMqttRetrofit.responseBodyConverter(responseType, annotations);
@@ -167,7 +188,10 @@ public class ServiceMethod<R, T> {
             return methodError(message + " (parameter #" + (p + 1) + ")", args);
         }
 
-        private CallAdapter<T, R> createCallAdapter() {
+        /**
+         * @return 创建返回值的适配器 （默认返回 call<T> :  如果处理：call<T>--->Observable<T>）
+         */
+        private CallAdapter<R, T> createCallAdapter() {
             Type returnType = method.getGenericReturnType();
             if (Utils.hasUnresolvableType(returnType)) {
                 throw methodError(
@@ -178,7 +202,7 @@ public class ServiceMethod<R, T> {
             }
             Annotation[] annotations = method.getAnnotations();
             try {
-                CallAdapter<T, R> callAdapter = (CallAdapter<T, R>) mMqttRetrofit.callAdapter(returnType, annotations);
+                CallAdapter<R, T> callAdapter = (CallAdapter<R, T>) mMqttRetrofit.callAdapter(returnType, annotations);
                 return callAdapter;
             } catch (Exception e) {
                 throw methodError(e, "Unable to create call adapter for %s", returnType);
@@ -196,14 +220,6 @@ public class ServiceMethod<R, T> {
                     + method.getDeclaringClass().getSimpleName()
                     + "."
                     + method.getName(), cause);
-        }
-
-
-        private void parseMethodAnnotations() {
-            for (int i = 0; i < methodAnnotations.length; i++) {
-                Annotation methodAnnotation = methodAnnotations[i];
-                parseMethodAnnotation(methodAnnotation);
-            }
         }
 
         private void parseMethodAnnotation(Annotation methodAnnotation) {

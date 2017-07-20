@@ -3,8 +3,6 @@ package com.example.mqttretrofit.converter;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 
-import java.io.IOException;
-
 /**
  * @author denghang
  * @version V1.0
@@ -22,7 +20,7 @@ public class GsonRequestBodyConverter<T> implements Converter<T, String> {
     }
 
     @Override
-    public String convert(T value) throws IOException {
+    public String convert(T value) {
         return mAdapter.toJson(value);
     }
 }

@@ -6,6 +6,7 @@ import com.example.mqttretrofit.converter.Converter;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.Map;
 
 
@@ -17,13 +18,12 @@ import java.util.Map;
  * @date 2017/7/20 11
  */
 abstract class ParameterHandler<T> {
-    abstract void apply(Map<String,String> stringMap, @Nullable T value) throws IOException;
+    abstract void apply(Map<String, String> stringMap, @Nullable T value);
 
     final ParameterHandler<Iterable<T>> iterable() {
         return new ParameterHandler<Iterable<T>>() {
             @Override
-            void apply(Map<String,String> stringMap, @Nullable Iterable<T> values)
-                    throws IOException {
+            void apply(Map<String, String> stringMap, @Nullable Iterable<T> values) {
                 if (values == null)
                     return; // Skip null values.
 
@@ -37,7 +37,7 @@ abstract class ParameterHandler<T> {
     final ParameterHandler<Object> array() {
         return new ParameterHandler<Object>() {
             @Override
-            void apply(Map<String,String> stringMap, @Nullable Object values) throws IOException {
+            void apply(Map<String, String> stringMap, @Nullable Object values) {
                 if (values == null)
                     return; // Skip null values.
 
@@ -60,15 +60,19 @@ abstract class ParameterHandler<T> {
         }
 
         @Override
-        void apply(Map<String,String> stringMap, @Nullable T value) throws IOException {
+        void apply(Map<String, String> stringMap, @Nullable T value) {
             if (value == null)
                 return; // Skip null values.
 
-            String queryValue = valueConverter.convert(value);
+            String queryValue = null;
+            try {
+                queryValue = valueConverter.convert(value);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             if (queryValue == null)
                 return; // Skip converted but null values
 
-//            builder.addQueryParam(name, queryValue, encoded);
         }
     }
 
@@ -78,8 +82,7 @@ abstract class ParameterHandler<T> {
         }
 
         @Override
-        void apply(Map<String,String> builder, @Nullable Map<String, T> value)
-                throws IOException {
+        void apply(Map<String, String> builder, @Nullable Map<String, T> value) {
             if (value == null) {
                 throw new IllegalArgumentException("Query map was null.");
             }
@@ -112,24 +115,25 @@ abstract class ParameterHandler<T> {
     }
 
     static final class Body<T> extends ParameterHandler<T> {
-        private final Converter<T, Map<String,String>> converter;
+        private final Converter<T, String> converter;
+        private final Type t;
 
-        Body(Converter<T, Map<String,String>> converter) {
+        public Body(Type t, Converter<T, String> converter) {
             this.converter = converter;
+            this.t = t;
         }
 
         @Override
-        void apply(Map<String,String> builder, @Nullable T value) {
+        void apply(Map<String, String> stringMap, @Nullable T value) {
             if (value == null) {
                 throw new IllegalArgumentException("Body parameter value must not be null.");
             }
-            /*RequestBody body;
             try {
-                body = converter.convert(value);
+                String c = converter.convert(value);
             } catch (IOException e) {
-                throw new RuntimeException("Unable to convert " + value + " to RequestBody", e);
+                e.printStackTrace();
             }
-            builder.setBody(body);*/
+
         }
     }
 }

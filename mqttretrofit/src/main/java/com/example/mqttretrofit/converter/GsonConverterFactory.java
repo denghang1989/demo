@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.Map;
 
 public class GsonConverterFactory extends Converter.Factory {
 
@@ -32,5 +33,15 @@ public class GsonConverterFactory extends Converter.Factory {
     public Converter<String, ?> responseBodyConverter(Type type, Annotation[] parameterAnnotations) {
         TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
         return new GsonResponseBodyConverter<>(gson, adapter);
+    }
+
+    @Override
+    public Converter<?, String> stringConverter(Type type, Annotation[] annotations) {
+        return super.stringConverter(type, annotations);
+    }
+
+    @Override
+    public String mapToString(Map<String, String> map) {
+        return gson.toJson(map);
     }
 }

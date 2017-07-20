@@ -18,8 +18,7 @@ public class ServiceProxy implements InvocationHandler {
         if (method.getDeclaringClass() == Object.class) {
             return method.invoke(this, args);
         }
-        ServiceMethod<Object, Object> serviceMethod =
-                (ServiceMethod<Object, Object>) loadServiceMethod(method);
+        ServiceMethod<Object, Object> serviceMethod = (ServiceMethod<Object, Object>) loadServiceMethod(method);
         MqttCall<Object> mqttCall = new MqttCall<>(serviceMethod, args,mMqttRetrofit);
         return serviceMethod.mCallAdapter.adapt(mqttCall);
     }
