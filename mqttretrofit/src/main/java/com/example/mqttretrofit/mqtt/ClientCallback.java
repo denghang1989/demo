@@ -31,7 +31,7 @@ public class ClientCallback implements MqttCallback {
 
     @Override
     public void messageArrived(@Nullable String topic, MqttMessage message) throws Exception {
-        final String content = new String(message.getPayload());
+        final String content = new String(message.getPayload(),"UTF-8");
         Log.d(TAG, "messageArrived: "+content);
         JSONObject jsonObject = new JSONObject(content);
         String cmd = jsonObject.optString("cmd");

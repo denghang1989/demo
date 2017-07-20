@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         ClientMqttClient client = new ClientMqttClient(option);
         client.connect();
 
-        MqttRetrofit mqttRetrofit = new MqttRetrofit.Builder().setMqttClinet(client).build();
+        MqttRetrofit mqttRetrofit = new MqttRetrofit.Builder().setMqttClient(client).build();
         final MqttApi mqttApi = mqttRetrofit.create(MqttApi.class);
 
         Gson gson = new Gson();

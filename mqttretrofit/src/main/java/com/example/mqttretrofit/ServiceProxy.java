@@ -1,7 +1,5 @@
 package com.example.mqttretrofit;
 
-import com.example.mqttretrofit.converter.Converter;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
@@ -20,18 +18,21 @@ public class ServiceProxy implements InvocationHandler {
         if (method.getDeclaringClass() == Object.class) {
             return method.invoke(this, args);
         }
-        ServiceMethod serviceMethod = loadServiceMethod(method,args);
-        Converter converter = mMqttRetrofit.converter(serviceMethod.actualType);
-        MqttCall mqttCall = new MqttCall(mMqttRetrofit, serviceMethod,converter);
-        return mqttCall;
+        ServiceMethod<Object, Object> serviceMethod =
+                (ServiceMethod<Object, Object>) loadServiceMethod(method);
+        MqttCall<Object> mqttCall = new MqttCall<>(serviceMethod, args,mMqttRetrofit);
+        return serviceMethod.mCallAdapter.adapt(mqttCall);
     }
 
-    private ServiceMethod loadServiceMethod(Method method, Object[] args) {
-        ServiceMethod result;
+    private ServiceMethod<?, ?> loadServiceMethod(Method method) {
+        ServiceMethod<?, ?> result = mMqttRetrofit.getServiceMethodCache().get(method);
+        if (result != null) {
+            return result;
+        }
         synchronized (mMqttRetrofit.getServiceMethodCache()) {
             result = mMqttRetrofit.getServiceMethodCache().get(method);
             if (result == null) {
-                result = new ServiceMethod.Builder(method,args).build();
+                result = new ServiceMethod.Builder(mMqttRetrofit, method).build();
                 mMqttRetrofit.getServiceMethodCache().put(method, result);
             }
         }

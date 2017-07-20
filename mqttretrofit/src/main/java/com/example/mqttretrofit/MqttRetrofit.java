@@ -1,5 +1,7 @@
 package com.example.mqttretrofit;
 
+import com.example.mqttretrofit.adpter.CallAdapter;
+import com.example.mqttretrofit.adpter.DefaultCallAdapterFactory;
 import com.example.mqttretrofit.converter.Converter;
 import com.example.mqttretrofit.converter.GsonConverterFactory;
 import com.example.mqttretrofit.mqtt.Argument;
@@ -7,34 +9,32 @@ import com.example.mqttretrofit.mqtt.ClientMqttClient;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-import static com.example.mqttretrofit.utlis.Utils.checkNotNull;
+import static com.example.mqttretrofit.utlis.Check.checkNotNull;
 
 /**
  * @date 2017/6/20 10
  */
 public class MqttRetrofit {
 
-    private final Map<Method, ServiceMethod> serviceMethodCache = new LinkedHashMap<>();
-    private Converter.Factory mConverter;
-    private CallAdapter mCallAdapter;
+    private final Map<Method, ServiceMethod<?, ?>> serviceMethodCache = new ConcurrentHashMap<>();
+    private Converter.Factory mConverterFactory;
+    private CallAdapter.Factory mCallAdapterFactory;
     private ClientMqttClient mClientMqttClient;
 
     private MqttRetrofit(Builder builder) {
-        mConverter = builder.mConverter;
-        mCallAdapter = builder.mCallAdapter;
+        mConverterFactory = builder.mConverterFactory;
+        mCallAdapterFactory = builder.mCallAdapterFactory;
         mClientMqttClient = builder.mClientMqttClient;
-        if (mConverter == null) {
-            mConverter = new GsonConverterFactory();
-        }
     }
 
-    public <T> T create(Class<T> clazz) {
+    public <T> T create(final Class<T> clazz) {
         if (!clazz.isInterface()) {
             throw new IllegalArgumentException();
         }
@@ -47,40 +47,62 @@ public class MqttRetrofit {
         return mClientMqttClient.getMqttClient();
     }
 
-    public Map<Method, ServiceMethod> getServiceMethodCache() {
+    public Map<Method, ServiceMethod<?, ?>> getServiceMethodCache() {
         return serviceMethodCache;
-    }
-
-    public CallAdapter getCallAdapter() {
-        return mCallAdapter;
-    }
-
-    public Converter converter(Type actualType) {
-        return mConverter.getConverter(actualType);
     }
 
     public Map<String, Argument> getCallbackMap() {
         return mClientMqttClient.getCallbackMap();
     }
 
+    public <T> Converter<String, T> responseBodyConverter(Type responseType, Annotation[] annotations) {
+        return nextResponseBodyConverter(responseType, annotations);
+    }
+
+    private <T> Converter<String, T> nextResponseBodyConverter(Type type, Annotation[] annotations) {
+        checkNotNull(type, "type == null");
+        checkNotNull(annotations, "annotations == null");
+        Converter<String, ?> converter =
+                mConverterFactory.responseBodyConverter(type, annotations);
+        if (converter != null) {
+            //noinspection unchecked
+            return (Converter<String, T>) converter;
+        }
+        return null;
+    }
+
+    public Converter<?, String> stringConverter(Type iterableType, Annotation[] annotations) {
+        return null;
+    }
+
+    public Converter<?, Map<String, String>> requestBodyConverter(Type type, Annotation[] annotations, Annotation[] methodAnnotations) {
+        return null;
+    }
+
     public static final class Builder {
-        private Converter.Factory mConverter;
-        private CallAdapter mCallAdapter;
+        private Converter.Factory mConverterFactory;
+        private CallAdapter.Factory mCallAdapterFactory;
         private ClientMqttClient mClientMqttClient;
 
-        public Builder setMqttClinet(ClientMqttClient mqttClinet) {
-            checkNotNull(mqttClinet, "mqttClient = null");
-            this.mClientMqttClient = mqttClinet;
+        public Builder setMqttClient(ClientMqttClient mqttClientt) {
+            checkNotNull(mqttClientt, "mqttClient = null");
+            this.mClientMqttClient = mqttClientt;
+            if (mCallAdapterFactory == null) {
+                mCallAdapterFactory = DefaultCallAdapterFactory.INSTANCE;
+            }
+            if (mConverterFactory == null) {
+                mConverterFactory = new GsonConverterFactory();
+            }
             return this;
         }
 
         public Builder setConverterFactory(Converter.Factory factory) {
-            this.mConverter = factory;
+            this.mConverterFactory = factory;
             return this;
         }
 
-        public Builder setCallAdapterFactory(CallAdapter factory) {
-            this.mCallAdapter = factory;
+        public Builder setCallAdapterFactory(CallAdapter.Factory factory) {
+            this.mCallAdapterFactory = factory;
             return this;
         }
 
@@ -89,5 +111,18 @@ public class MqttRetrofit {
         }
     }
 
+    public CallAdapter<?, ?> callAdapter(Type returnType, Annotation[] annotations) {
+        return nextCallAdapter(returnType, annotations);
+    }
 
+    public CallAdapter<?, ?> nextCallAdapter(Type returnType, Annotation[] annotations) {
+        checkNotNull(returnType, "returnType == null");
+        checkNotNull(annotations, "annotations == null");
+        CallAdapter<?, ?> adapter = mCallAdapterFactory.get(returnType, annotations);
+        if (adapter != null) {
+            return adapter;
+        } else {
+            throw new IllegalArgumentException("参数错误");
+        }
+    }
 }
