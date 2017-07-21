@@ -70,8 +70,8 @@ public class MqttRetrofit {
         return null;
     }
 
-    public Converter<?, String> stringConverter(Type iterableType, Annotation[] annotations) {
-        return null;
+    public Converter<?, String> stringConverter(Type type, Annotation[] annotations) {
+        return mConverterFactory.stringConverter(type, annotations);
     }
 
     public Converter<?, String> requestBodyConverter(Type type, Annotation[] annotations, Annotation[] methodAnnotations) {

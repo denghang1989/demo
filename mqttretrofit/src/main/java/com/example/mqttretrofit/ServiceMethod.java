@@ -1,8 +1,11 @@
 package com.example.mqttretrofit;
 
+import android.util.Log;
+
 import com.example.mqttretrofit.adpter.CallAdapter;
 import com.example.mqttretrofit.annotation.Body;
 import com.example.mqttretrofit.annotation.Cmd;
+import com.example.mqttretrofit.annotation.CommandName;
 import com.example.mqttretrofit.annotation.Query;
 import com.example.mqttretrofit.annotation.QueryMap;
 import com.example.mqttretrofit.annotation.Topic;
@@ -21,7 +24,9 @@ import java.util.Map;
  * @date 2017/6/20 11
  */
 public class ServiceMethod<R, T> {
+    private static final String TAG = "ServiceMethod";
     private String cmd;
+    private String cmdName;
     private String topic;
     final CallAdapter<R, T> mCallAdapter;
     Converter<String, R> responseConverter;
@@ -29,12 +34,13 @@ public class ServiceMethod<R, T> {
     private MqttRetrofit mMqttRetrofit;
 
     public ServiceMethod(Builder<R, T> builder) {
-        this.cmd = builder.cmd;
+        this.cmd = builder.cmdValue;
         this.topic = builder.topic;
         this.mCallAdapter = builder.mCallAdapter;
         this.responseConverter = builder.responseConverter;
         this.parameterHandlers = builder.parameterHandlers;
         this.mMqttRetrofit = builder.mMqttRetrofit;
+        this.cmdName = builder.cmdName;
     }
 
     @SuppressWarnings("unchecked")
@@ -49,14 +55,18 @@ public class ServiceMethod<R, T> {
         for (int p = 0; p < argumentCount; p++) {
             handlers[p].apply(requestMap, args[p]);
         }
-        return mMqttRetrofit.mapToString(requestMap);
+        requestMap.put(cmdName, cmd);
+        String requestString = mMqttRetrofit.mapToString(requestMap);
+        Log.d(TAG, "toRequest: " + requestString);
+        return requestString;
     }
 
-    public final class Builder<R, T> {
-        private String cmd;
+    public static final class Builder<R, T> {
+        private String cmdValue;
+        private String cmdName;
         private String topic;
         final Method method;
-        final Annotation[] methodAnnotations; // 方法注解 必须制定（cmd，topic）
+        final Annotation[] methodAnnotations; // 方法注解 必须制定（cmdValue，topic）
         final Annotation[][] parameterAnnotationsArray; //parameter注解 返回2位数组，可能有多个注解
         final Type[] parameterTypes; //parameter 数据类型 （java8 可以使用Parameter.java 一个类全部搞定）
 
@@ -75,15 +85,15 @@ public class ServiceMethod<R, T> {
         }
 
         public ServiceMethod build() {
-            Check.checkNotNull(cmd, method.getName() + "方法上面缺少@cmd注解");
+            for (Annotation annotation : methodAnnotations) {
+                parseMethodAnnotation(annotation);
+            }
+            Check.checkNotNull(cmdValue, method.getName() + "方法上面缺少@cmd注解");
             Check.checkNotNull(topic, method.getName() + "方法上面缺少@Topic注解");
 
             mCallAdapter = createCallAdapter();
             responseType = createCallAdapter().responseType();
             responseConverter = createResponseConverter();
-            for (Annotation annotation : methodAnnotations) {
-                parseMethodAnnotation(annotation);
-            }
 
             int parameterCount = parameterAnnotationsArray.length;
             parameterHandlers = new ParameterHandler<?>[parameterCount];
@@ -128,20 +138,9 @@ public class ServiceMethod<R, T> {
                 String name = query.value();
                 Class<?> rawParameterType = Utils.getRawType(parameterType);
                 if (Iterable.class.isAssignableFrom(rawParameterType)) {
-                    if (!(parameterType instanceof ParameterizedType)) {
-                        throw parameterError(i, rawParameterType.getSimpleName()
-                                + " must include generic parameterType (e.g., "
-                                + rawParameterType.getSimpleName()
-                                + "<String>)");
-                    }
-                    ParameterizedType parameterizedType = (ParameterizedType) parameterType;
-                    Type iterableType = Utils.getParameterUpperBound(0, parameterizedType);
-                    Converter<?, String> converter = mMqttRetrofit.stringConverter(iterableType, annotations);
-                    return new ParameterHandler.Query<>(name, converter).iterable();
+                    throw parameterError(i, "not only support Iterable,只是支持基础类型，英文我不会啊");
                 } else if (rawParameterType.isArray()) {
-                    Class<?> arrayComponentType = boxIfPrimitive(rawParameterType.getComponentType());
-                    Converter<?, String> converter = mMqttRetrofit.stringConverter(arrayComponentType, annotations);
-                    return new ParameterHandler.Query<>(name, converter).array();
+                    throw parameterError(i, "not only support Array,只是支持基础类型，英文我不会啊 ");
                 } else {
                     Converter<?, String> converter = mMqttRetrofit.stringConverter(parameterType, annotations);
                     return new ParameterHandler.Query<>(name, converter);
@@ -158,7 +157,7 @@ public class ServiceMethod<R, T> {
                 }
                 Type[] actualTypeArguments = ((ParameterizedType) mapType).getActualTypeArguments();
                 if (!actualTypeArguments[0].equals(String.class) && !actualTypeArguments[1].equals(String.class)) {
-                    throw parameterError(i, "Map must Map<String, String>");
+                    throw parameterError(i, "only support Map<String, String>");
                 }
                 return new ParameterHandler.QueryMap<>();
             } else if (annotation instanceof Body) {
@@ -166,10 +165,9 @@ public class ServiceMethod<R, T> {
                 try {
                     converter = mMqttRetrofit.requestBodyConverter(parameterType, annotations, methodAnnotations);
                 } catch (RuntimeException e) {
-                    // Wide exception range because factories are user code.
                     throw parameterError(i, "Unable to create @Body converter for %s", parameterType);
                 }
-                return new ParameterHandler.Body<>(parameterType,converter);
+                return new ParameterHandler.Body<>(converter);
             }
 
             return null;
@@ -179,7 +177,7 @@ public class ServiceMethod<R, T> {
             Annotation[] annotations = method.getAnnotations();
             try {
                 return mMqttRetrofit.responseBodyConverter(responseType, annotations);
-            } catch (RuntimeException e) { // Wide exception range because factories are user code.
+            } catch (RuntimeException e) {
                 throw methodError(e, "Unable to create converter for %s", responseType);
             }
         }
@@ -191,6 +189,7 @@ public class ServiceMethod<R, T> {
         /**
          * @return 创建返回值的适配器 （默认返回 call<T> :  如果处理：call<T>--->Observable<T>）
          */
+        @SuppressWarnings("unchecked")
         private CallAdapter<R, T> createCallAdapter() {
             Type returnType = method.getGenericReturnType();
             if (Utils.hasUnresolvableType(returnType)) {
@@ -224,7 +223,8 @@ public class ServiceMethod<R, T> {
 
         private void parseMethodAnnotation(Annotation methodAnnotation) {
             if (methodAnnotation instanceof Cmd) {
-                this.cmd = ((Cmd) methodAnnotation).value();
+                this.cmdValue = ((Cmd) methodAnnotation).value();
+                this.cmdName = Cmd.class.getAnnotation(CommandName.class).value();
             } else if (methodAnnotation instanceof Topic) {
                 this.topic = ((Topic) methodAnnotation).value();
             }

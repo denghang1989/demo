@@ -37,7 +37,8 @@ public class GsonConverterFactory extends Converter.Factory {
 
     @Override
     public Converter<?, String> stringConverter(Type type, Annotation[] annotations) {
-        return super.stringConverter(type, annotations);
+        TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
+        return new GsonRequestBodyConverter<>(gson, adapter);
     }
 
     @Override

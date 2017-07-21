@@ -30,6 +30,7 @@ public class ClientCallback implements MqttCallback {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void messageArrived(@Nullable String topic, MqttMessage message) throws Exception {
         final String content = new String(message.getPayload(),"UTF-8");
         Log.d(TAG, "messageArrived: "+content);

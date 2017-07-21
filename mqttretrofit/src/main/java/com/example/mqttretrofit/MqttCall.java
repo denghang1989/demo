@@ -26,12 +26,13 @@ public class MqttCall<T> implements Call<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void enqueue(Callback<T> callback) {
         String cmd_resp = serviceMethod.getCmd()+"_resp";
         String topic = serviceMethod.getTopic();
         try {
             String request = createRawRequest();
-            mCallbackMap.put(cmd_resp,new Argument(null,callback));
+            mCallbackMap.put(cmd_resp,new Argument(serviceMethod.responseConverter,callback));
             MqttMessage mqttMessage = new MqttMessage(request.getBytes());
             mMqttRetrofit.getMqttClient().publish(topic, mqttMessage);
         } catch (MqttException e) {

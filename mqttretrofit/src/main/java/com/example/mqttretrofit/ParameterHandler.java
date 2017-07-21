@@ -4,9 +4,11 @@ import android.support.annotation.Nullable;
 
 import com.example.mqttretrofit.converter.Converter;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.lang.reflect.Type;
+import java.util.Iterator;
 import java.util.Map;
 
 
@@ -20,36 +22,6 @@ import java.util.Map;
 abstract class ParameterHandler<T> {
     abstract void apply(Map<String, String> stringMap, @Nullable T value);
 
-    final ParameterHandler<Iterable<T>> iterable() {
-        return new ParameterHandler<Iterable<T>>() {
-            @Override
-            void apply(Map<String, String> stringMap, @Nullable Iterable<T> values) {
-                if (values == null)
-                    return; // Skip null values.
-
-                for (T value : values) {
-                    ParameterHandler.this.apply(stringMap, value);
-                }
-            }
-        };
-    }
-
-    final ParameterHandler<Object> array() {
-        return new ParameterHandler<Object>() {
-            @Override
-            void apply(Map<String, String> stringMap, @Nullable Object values) {
-                if (values == null)
-                    return; // Skip null values.
-
-                for (int i = 0, size = Array.getLength(values); i < size; i++) {
-                    //noinspection unchecked
-                    ParameterHandler.this.apply(stringMap, (T) Array.get(values, i));
-                }
-            }
-        };
-    }
-
-
     static final class Query<T> extends ParameterHandler<T> {
         private final String name;
         private final Converter<T, String> valueConverter;
@@ -62,7 +34,7 @@ abstract class ParameterHandler<T> {
         @Override
         void apply(Map<String, String> stringMap, @Nullable T value) {
             if (value == null)
-                return; // Skip null values.
+                return;
 
             String queryValue = null;
             try {
@@ -70,19 +42,19 @@ abstract class ParameterHandler<T> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if (queryValue == null)
-                return; // Skip converted but null values
-
+            if (queryValue == null) {
+                return;
+            }
+            stringMap.put(name, queryValue);
         }
     }
 
     static final class QueryMap<T> extends ParameterHandler<Map<String, T>> {
-
         public QueryMap() {
         }
 
         @Override
-        void apply(Map<String, String> builder, @Nullable Map<String, T> value) {
+        void apply(Map<String, String> stringMap, @Nullable Map<String, T> value) {
             if (value == null) {
                 throw new IllegalArgumentException("Query map was null.");
             }
@@ -97,30 +69,16 @@ abstract class ParameterHandler<T> {
                     throw new IllegalArgumentException(
                             "Query map contained null value for key '" + entryKey + "'.");
                 }
-
-               /* String convertedEntryValue = valueConverter.convert(entryValue);
-                if (convertedEntryValue == null) {
-                    throw new IllegalArgumentException("Query map value '"
-                            + entryValue
-                            + "' converted to null by "
-                            + valueConverter.getClass().getName()
-                            + " for key '"
-                            + entryKey
-                            + "'.");
-                }
-
-                builder.addQueryParam(entryKey, convertedEntryValue, encoded);*/
+                stringMap.put(entryKey, (String) entryValue);
             }
         }
     }
 
     static final class Body<T> extends ParameterHandler<T> {
-        private final Converter<T, String> converter;
-        private final Type t;
+        private Converter<T, String> mConverter;
 
-        public Body(Type t, Converter<T, String> converter) {
-            this.converter = converter;
-            this.t = t;
+        public Body(Converter<T, String> converter) {
+            mConverter = converter;
         }
 
         @Override
@@ -129,11 +87,19 @@ abstract class ParameterHandler<T> {
                 throw new IllegalArgumentException("Body parameter value must not be null.");
             }
             try {
-                String c = converter.convert(value);
+                String convert = mConverter.convert(value);
+                JSONObject jsonObject = new JSONObject(convert);
+                Iterator<String> keys = jsonObject.keys();
+                while (keys.hasNext()) {
+                    String keyName = keys.next();
+                    String valueName = jsonObject.optString(keyName);
+                    stringMap.put(keyName, valueName);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
         }
     }
 }
