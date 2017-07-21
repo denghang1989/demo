@@ -34,6 +34,7 @@ public class MqttRetrofit {
         mClientMqttClient = builder.mClientMqttClient;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T create(final Class<T> clazz) {
         if (!clazz.isInterface()) {
             throw new IllegalArgumentException();

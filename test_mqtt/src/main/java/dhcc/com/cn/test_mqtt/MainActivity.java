@@ -2,6 +2,7 @@ package dhcc.com.cn.test_mqtt;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -9,7 +10,6 @@ import com.example.mqttretrofit.Callback;
 import com.example.mqttretrofit.MqttRetrofit;
 import com.example.mqttretrofit.mqtt.ClientMqttClient;
 import com.example.mqttretrofit.mqtt.MqttConnectionOption;
-import com.orhanobut.logger.Logger;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -46,12 +46,14 @@ public class MainActivity extends AppCompatActivity {
                 mqttApi.getSystemSupportDevice(request).enqueue(new Callback<Response>() {
                     @Override
                     public void onSuccess(Response response) {
-                        Logger.d(response.device_list.toString());
+                        int size = response.device_list.size();
+                        Log.d(TAG, "onSuccess: "+"eeeeeeeeeeeeeee"+size);
                     }
 
                     @Override
                     public void onError(Throwable t) {
-
+                        t.printStackTrace();
+                        Log.d(TAG, "onError: "+"wwwwwwwwwww");
                     }
                 });
             }
