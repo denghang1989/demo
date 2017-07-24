@@ -109,7 +109,7 @@ public class ServiceMethod<R, T> {
                 }
                 parameterHandlers[i] = parameter(i, parameterType, parameterAnnotations);
             }
-            return new ServiceMethod(this);
+            return new ServiceMethod<>(this);
         }
 
         private ParameterHandler<?> parameter(int i, Type parameterType, Annotation[] annotations) {
