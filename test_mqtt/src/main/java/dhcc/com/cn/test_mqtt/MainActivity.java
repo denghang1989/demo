@@ -12,6 +12,8 @@ import com.example.mqttretrofit.mqtt.MqttConnectionOption;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 
+import rx.Observable;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final String USER_ID = "1ce9dcf2d2df41cda8b6bab28934293b";
@@ -58,5 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+
+        Observable observable = Observable
     }
 }

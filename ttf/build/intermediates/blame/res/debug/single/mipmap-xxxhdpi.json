@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "E:\\workspace\\github_my_demo\\demo\\ttf\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi\\ic_launcher.png",
+        "source": "E:\\workspace\\github_my_demo\\demo\\ttf\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "E:\\workspace\\github_my_demo\\demo\\ttf\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi\\ic_launcher_round.png",
+        "source": "E:\\workspace\\github_my_demo\\demo\\ttf\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher_round.png"
+    }
+]

@@ -1,0 +1,7 @@
+#Wed Jul 12 21:53:57 CST 2017
+base.0=E\:\\workspace\\github_my_demo\\demo\\ttf\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_471e7e70610638ab76b04ecc66d71a9b02763a12
+renamed.1=classes2.dex
+renamed.0=classes.dex
+file.1=E\:\\workspace\\github_my_demo\\demo\\ttf\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_040a2a8f9e25ed45e654ce32be1b633f1267e7c8\\classes.dex
+base.1=E\:\\workspace\\github_my_demo\\demo\\ttf\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_040a2a8f9e25ed45e654ce32be1b633f1267e7c8
+file.0=E\:\\workspace\\github_my_demo\\demo\\ttf\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_471e7e70610638ab76b04ecc66d71a9b02763a12\\classes.dex

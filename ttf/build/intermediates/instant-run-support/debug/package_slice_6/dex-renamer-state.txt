@@ -1,0 +1,4 @@
+#Wed Jul 12 22:53:07 CST 2017
+base.0=E\:\\workspace\\github_my_demo\\demo\\ttf\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\5\\slice_6
+renamed.0=classes.dex
+file.0=E\:\\workspace\\github_my_demo\\demo\\ttf\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\5\\slice_6\\classes.dex
