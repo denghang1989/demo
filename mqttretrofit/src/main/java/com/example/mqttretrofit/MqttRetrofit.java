@@ -34,6 +34,7 @@ public class MqttRetrofit {
         mClientMqttClient = builder.mClientMqttClient;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T create(final Class<T> clazz) {
         if (!clazz.isInterface()) {
             throw new IllegalArgumentException();
@@ -62,8 +63,7 @@ public class MqttRetrofit {
     private <T> Converter<String, T> nextResponseBodyConverter(Type type, Annotation[] annotations) {
         checkNotNull(type, "type == null");
         checkNotNull(annotations, "annotations == null");
-        Converter<String, ?> converter =
-                mConverterFactory.responseBodyConverter(type, annotations);
+        Converter<String, ?> converter = mConverterFactory.responseBodyConverter(type, annotations);
         if (converter != null) {
             //noinspection unchecked
             return (Converter<String, T>) converter;
@@ -71,12 +71,16 @@ public class MqttRetrofit {
         return null;
     }
 
-    public Converter<?, String> stringConverter(Type iterableType, Annotation[] annotations) {
-        return null;
+    public Converter<?, String> stringConverter(Type type, Annotation[] annotations) {
+        return mConverterFactory.stringConverter(type, annotations);
     }
 
-    public Converter<?, Map<String, String>> requestBodyConverter(Type type, Annotation[] annotations, Annotation[] methodAnnotations) {
-        return null;
+    public Converter<?, String> requestBodyConverter(Type type, Annotation[] annotations, Annotation[] methodAnnotations) {
+        return mConverterFactory.requestBodyConverter(type, annotations, methodAnnotations);
+    }
+
+    public String mapToString(Map<String, String> requestMap) {
+        return mConverterFactory.mapToString(requestMap);
     }
 
     public static final class Builder {

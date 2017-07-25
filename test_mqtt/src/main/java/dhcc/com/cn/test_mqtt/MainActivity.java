@@ -2,6 +2,7 @@ package dhcc.com.cn.test_mqtt;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -9,8 +10,6 @@ import com.example.mqttretrofit.Callback;
 import com.example.mqttretrofit.MqttRetrofit;
 import com.example.mqttretrofit.mqtt.ClientMqttClient;
 import com.example.mqttretrofit.mqtt.MqttConnectionOption;
-import com.google.gson.Gson;
-import com.orhanobut.logger.Logger;
 
 import rx.Observable;
 
@@ -34,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         MqttRetrofit mqttRetrofit = new MqttRetrofit.Builder().setMqttClient(client).build();
         final MqttApi mqttApi = mqttRetrofit.create(MqttApi.class);
 
-        Gson gson = new Gson();
         final Request request = new Request();
         request.cmd = "get_system_device_list";
         request.from_id = "1ce9dcf2d2df41cda8b6bab28934293b";
@@ -42,20 +40,22 @@ public class MainActivity extends AppCompatActivity {
         request.from_type = "user";
         request.to_type = "server_user";
         request.user_id = "1ce9dcf2d2df41cda8b6bab28934293b";
-        final String toJson = gson.toJson(request);
+//        final String toJson = gson.toJson(request);
 
         mTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mqttApi.getSystemSupportDevice(toJson).enqueue(new Callback<Response>() {
+                mqttApi.getSystemSupportDevice(request).enqueue(new Callback<Response>() {
                     @Override
                     public void onSuccess(Response response) {
-                        Logger.d(response.device_list.toString());
+                        int size = response.device_list.size();
+                        Log.d(TAG, "onSuccess: "+"eeeeeeeeeeeeeee"+size);
                     }
 
                     @Override
                     public void onError(Throwable t) {
-
+                        t.printStackTrace();
+                        Log.d(TAG, "onError: "+"wwwwwwwwwww");
                     }
                 });
             }
