@@ -1,10 +1,12 @@
 package com.example.mqttretrofit.mqtt;
 
-import com.example.mqttretrofit.utlis.MD5Utils;
-
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 
 public class MqttConnectionOption {
+
+    private static final String KEY_NAME = "01a4ec05b64d4511ac2500ab0c0654f7";
+    private static final String KEY_PASSWORD = "6e2cfe4abce5428fa2d27fb44c444289";
+
     public String userId;
     public String baseUrl;
     public String mobile;
@@ -16,13 +18,13 @@ public class MqttConnectionOption {
         userId = builder.userId;
         baseUrl = builder.baseUrl;
         mobile = builder.mobile;
-        mqttConnectOptions.setUserName(mobile);
-        mqttConnectOptions.setPassword(MD5Utils.getMd5(mobile).toCharArray());
+        mqttConnectOptions.setUserName(KEY_NAME);
+        mqttConnectOptions.setPassword(KEY_PASSWORD.toCharArray());
         mqttConnectOptions.setConnectionTimeout(1000);
         mqttConnectOptions.setCleanSession(false);
         mqttConnectOptions.setKeepAliveInterval(60);
         mqttConnectOptions.setAutomaticReconnect(true);
-        subscriptionTopic = "cloudring/user/" + userId;
+        subscriptionTopic = "cloudring/device/" + userId;
     }
 
     public static final class Builder {

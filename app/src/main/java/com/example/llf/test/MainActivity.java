@@ -14,6 +14,13 @@ import android.view.View;
 import android.widget.ListView;
 
 import java.util.List;
+import java.util.concurrent.Callable;
+
+import rx.Observable;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.util.async.Async;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
@@ -22,6 +29,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        Observable<String> stringObservable = Async.fromCallable(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                Thread.sleep(3000);
+                return "haha";
+            }
+        });
+        stringObservable.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<String>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(String s) {
+                Log.d(TAG, "onNext: "+s);
+            }
+        });
     }
 
     @Override
