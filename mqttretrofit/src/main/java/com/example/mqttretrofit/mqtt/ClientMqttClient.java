@@ -18,7 +18,8 @@ public class ClientMqttClient {
     public ClientMqttClient(MqttConnectionOption mqttConnection) {
         try {
             mMqttConnectionOption = mqttConnection;
-            mqttClient = new MqttClient(mMqttConnectionOption.baseUrl, mMqttConnectionOption.userId, new MemoryPersistence());
+//            mqttClient = new MqttClient(mMqttConnectionOption.baseUrl, mMqttConnectionOption.userId, new MemoryPersistence());
+            mqttClient = new MqttClient("tcp://iot.cloudring.net:1885", "C110A1B700045", new MemoryPersistence());
             mqttClient.setCallback(new ClientCallback(mCallbackMap));
         } catch (MqttException e) {
             e.printStackTrace();

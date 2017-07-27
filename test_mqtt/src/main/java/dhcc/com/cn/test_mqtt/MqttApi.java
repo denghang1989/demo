@@ -15,7 +15,7 @@ public interface MqttApi {
     Call<Response> getSystemSupportDevice(@Body Request request);
 
     @Cmd(" get_device_user")
-    @Topic("cloudring/server/user/")
+    @Topic("cloudring/server/user/1.0/")
     Call<Response> getDeviceUsers(@Body DeviceUsersRequest request);
 
 }

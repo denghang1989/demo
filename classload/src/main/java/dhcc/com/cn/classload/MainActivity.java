@@ -37,18 +37,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.pathSeparator + "kotlin.jar";
+        String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "kotlin.jar";
         File optimizedDexOutputPath = new File(absolutePath);
-        File dexOutputDir = this.getDir("dex", 0);
-        DexClassLoader dexClassLoader = new DexClassLoader(dexOutputDir.getAbsolutePath(), optimizedDexOutputPath.getAbsolutePath(), null, getClassLoader());
+        if (optimizedDexOutputPath.exists()) {
+            Log.d(TAG, "onCreate: " + optimizedDexOutputPath.getAbsolutePath());
 
-        try {
-            Class<?> loadClass = dexClassLoader.loadClass("cn.com.dhcc.Test");
-            Log.d(TAG, "onCreate: " + loadClass.getCanonicalName());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            File dexOutputDir = this.getDir("dex", 0);
+            DexClassLoader dexClassLoader = new DexClassLoader(dexOutputDir.getAbsolutePath(), optimizedDexOutputPath.getAbsolutePath(), null, getClassLoader());
+
+            try {
+                Class<?> loadClass = dexClassLoader.loadClass("cn.com.dhcc.Test");
+                Log.d(TAG, "onCreate: " + loadClass.getCanonicalName());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.d(TAG, "onCreate: "+ optimizedDexOutputPath.getAbsolutePath());
         }
-
 
     }
 }
