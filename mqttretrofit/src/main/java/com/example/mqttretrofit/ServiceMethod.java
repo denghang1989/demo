@@ -153,7 +153,7 @@ public class ServiceMethod<R, T> {
                     throw parameterError(i, "Map must include generic types (e.g., Map<String, String>)");
                 }
                 Type[] actualTypeArguments = ((ParameterizedType) mapType).getActualTypeArguments();
-                if (!actualTypeArguments[0].equals(String.class) && !actualTypeArguments[1].equals(String.class)) {
+                if (actualTypeArguments[0] != String.class && actualTypeArguments[1] != String.class) {
                     throw parameterError(i, "only support Map<String, String>");
                 }
                 return new ParameterHandler.QueryMap<>();
