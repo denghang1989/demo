@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/databinding_demo" />
             <option value="$PROJECT_DIR$/mqttretrofit" />
             <option value="$PROJECT_DIR$/router_demo" />
+            <option value="$PROJECT_DIR$/scroll" />
             <option value="$PROJECT_DIR$/test_mqtt" />
           </set>
         </option>

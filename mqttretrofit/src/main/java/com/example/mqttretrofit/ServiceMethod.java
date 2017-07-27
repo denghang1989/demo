@@ -1,7 +1,5 @@
 package com.example.mqttretrofit;
 
-import android.util.Log;
-
 import com.example.mqttretrofit.adpter.CallAdapter;
 import com.example.mqttretrofit.annotation.Body;
 import com.example.mqttretrofit.annotation.Cmd;
@@ -57,7 +55,6 @@ public class ServiceMethod<R, T> {
         }
         requestMap.put(cmdName, cmd);
         String requestString = mMqttRetrofit.mapToString(requestMap);
-        Log.d(TAG, "toRequest: " + requestString);
         return requestString;
     }
 

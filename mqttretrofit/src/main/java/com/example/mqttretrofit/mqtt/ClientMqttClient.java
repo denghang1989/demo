@@ -6,20 +6,19 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 public class ClientMqttClient {
     private static final String TAG = "ClientMqttClient";
-    private final Map<String, Argument> mCallbackMap = new LinkedHashMap<>();
+    private final Map<String, Argument> mCallbackMap = new WeakHashMap<>();
     private MqttClient mqttClient;
     private MqttConnectionOption mMqttConnectionOption;
 
     public ClientMqttClient(MqttConnectionOption mqttConnection) {
         try {
             mMqttConnectionOption = mqttConnection;
-//            mqttClient = new MqttClient(mMqttConnectionOption.baseUrl, mMqttConnectionOption.userId, new MemoryPersistence());
-            mqttClient = new MqttClient("tcp://iot.cloudring.net:1885", "C110A1B700045", new MemoryPersistence());
+            mqttClient = new MqttClient(mMqttConnectionOption.baseUrl, mMqttConnectionOption.userId, new MemoryPersistence());
             mqttClient.setCallback(new ClientCallback(mCallbackMap));
         } catch (MqttException e) {
             e.printStackTrace();
