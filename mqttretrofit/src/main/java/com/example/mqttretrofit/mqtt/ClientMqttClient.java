@@ -6,12 +6,12 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 public class ClientMqttClient {
     private static final String TAG = "ClientMqttClient";
-    private final Map<String, Argument> mCallbackMap = new LinkedHashMap<>();
+    private final Map<String, Argument> mCallbackMap = new WeakHashMap<>();
     private MqttClient mqttClient;
     private MqttConnectionOption mMqttConnectionOption;
 

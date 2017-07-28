@@ -4,9 +4,13 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/aspectjx/aspectjx.iml" filepath="$PROJECT_DIR$/aspectjx/aspectjx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/classload/classload.iml" filepath="$PROJECT_DIR$/classload/classload.iml" />
+      <module fileurl="file://$PROJECT_DIR$/classloadlib/classloadlib.iml" filepath="$PROJECT_DIR$/classloadlib/classloadlib.iml" />
       <module fileurl="file://$PROJECT_DIR$/databinding_demo/databinding_demo.iml" filepath="$PROJECT_DIR$/databinding_demo/databinding_demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/demo.iml" filepath="$PROJECT_DIR$/demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/mqttretrofit/mqttretrofit.iml" filepath="$PROJECT_DIR$/mqttretrofit/mqttretrofit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/router_demo/router_demo.iml" filepath="$PROJECT_DIR$/router_demo/router_demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/scroll/scroll.iml" filepath="$PROJECT_DIR$/scroll/scroll.iml" />
       <module fileurl="file://$PROJECT_DIR$/test_mqtt/test_mqtt.iml" filepath="$PROJECT_DIR$/test_mqtt/test_mqtt.iml" />
     </modules>
   </component>

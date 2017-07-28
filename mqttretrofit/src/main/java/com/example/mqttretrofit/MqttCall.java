@@ -1,6 +1,7 @@
 package com.example.mqttretrofit;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.example.mqttretrofit.mqtt.Argument;
 
@@ -13,6 +14,7 @@ import java.util.Map;
  * 2017/6/20 22
  */
 public class MqttCall<T> implements Call<T> {
+    private static final String TAG = "MqttCall";
     private final ServiceMethod<T, ?> serviceMethod;
     private final Object[] args;
     private final MqttRetrofit mMqttRetrofit;
@@ -30,6 +32,7 @@ public class MqttCall<T> implements Call<T> {
     public void enqueue(Callback<T> callback) {
         String cmd_resp = serviceMethod.getCmd()+"_resp";
         String topic = serviceMethod.getTopic();
+        Log.d(TAG, "enqueue: "+topic);
         try {
             String request = createRawRequest();
             mCallbackMap.put(cmd_resp,new Argument(serviceMethod.responseConverter,callback));

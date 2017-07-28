@@ -10,8 +10,12 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/aspectjx" />
+            <option value="$PROJECT_DIR$/classload" />
+            <option value="$PROJECT_DIR$/classloadlib" />
             <option value="$PROJECT_DIR$/databinding_demo" />
             <option value="$PROJECT_DIR$/mqttretrofit" />
+            <option value="$PROJECT_DIR$/router_demo" />
+            <option value="$PROJECT_DIR$/scroll" />
             <option value="$PROJECT_DIR$/test_mqtt" />
           </set>
         </option>

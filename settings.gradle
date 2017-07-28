@@ -1,1 +1,1 @@
-include ':app', ':databinding_demo', ':mqttretrofit', ':test_mqtt', ':aspectjx'
+include ':app', ':databinding_demo', ':mqttretrofit', ':test_mqtt', ':aspectjx', ':classload', ':classloadlib', ':router_demo', ':scroll'

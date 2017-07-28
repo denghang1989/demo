@@ -5,6 +5,7 @@ import com.example.mqttretrofit.utlis.MD5Utils;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 
 public class MqttConnectionOption {
+
     public String userId;
     public String baseUrl;
     public String mobile;
@@ -18,9 +19,8 @@ public class MqttConnectionOption {
         mobile = builder.mobile;
         mqttConnectOptions.setUserName(mobile);
         mqttConnectOptions.setPassword(MD5Utils.getMd5(mobile).toCharArray());
-        mqttConnectOptions.setConnectionTimeout(1000);
-        mqttConnectOptions.setCleanSession(false);
-        mqttConnectOptions.setKeepAliveInterval(60);
+        mqttConnectOptions.setConnectionTimeout(100);
+        mqttConnectOptions.setCleanSession(true);
         mqttConnectOptions.setAutomaticReconnect(true);
         subscriptionTopic = "cloudring/user/" + userId;
     }
