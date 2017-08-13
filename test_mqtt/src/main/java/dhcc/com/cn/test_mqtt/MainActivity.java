@@ -11,8 +11,6 @@ import com.example.mqttretrofit.MqttRetrofit;
 import com.example.mqttretrofit.mqtt.ClientMqttClient;
 import com.example.mqttretrofit.mqtt.MqttConnectionOption;
 
-import rx.Observable;
-
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final String USER_ID = "C110A1B700045";
@@ -60,6 +58,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Observable observable = Observable
     }
 }

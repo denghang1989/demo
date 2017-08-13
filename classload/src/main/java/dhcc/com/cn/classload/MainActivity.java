@@ -1,16 +1,11 @@
 package dhcc.com.cn.classload;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
-import java.io.File;
 import java.lang.ref.WeakReference;
-
-import dalvik.system.DexClassLoader;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "kotlin.jar";
+/*        String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "kotlin.jar";
         File optimizedDexOutputPath = new File(absolutePath);
         if (optimizedDexOutputPath.exists()) {
             Log.d(TAG, "onCreate: " + optimizedDexOutputPath.getAbsolutePath());
@@ -53,7 +48,10 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             Log.d(TAG, "onCreate: "+ optimizedDexOutputPath.getAbsolutePath());
-        }
+        }*/
+
+        TestDexClassload dexClassload = new TestDexClassload();
+        dexClassload.print("haha");
 
     }
 }
