@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.TextView;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -13,8 +12,6 @@ import dalvik.system.DexClassLoader;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-
-    private TextView mTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,33 +32,5 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        /*final DexClassLoader dexClassLoader = new DexClassLoader(optimiDexPath.getAbsolutePath(),
-                dexOutputDir.getAbsolutePath(),
-                null,
-                getClassLoader());
-
-        mTextView = (TextView) findViewById(R.id.textView);
-        mTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    Class<?> loadClass = dexClassLoader.loadClass("cn.com.dhcc.demo.Test");
-                    Object o = loadClass.newInstance();
-                    Method method = loadClass.getDeclaredMethod("say", null);
-                    method.invoke(o);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }*/
     }
 }

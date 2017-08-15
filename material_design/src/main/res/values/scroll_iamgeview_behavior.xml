@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="scrollImageViewBehavior">
+        <attr name="bh_dependentViewId" format="reference"/>
+        <attr name="bh_targetX" format="dimension"/>
+        <attr name="bh_targetY" format="dimension"/>
+        <attr name="bh_targetWidth" format="dimension"/>
+        <attr name="bh_targetHeight" format="dimension"/>
+        <attr name="bh_offsetY" format="dimension"/>
+    </declare-styleable>
+</resources>

@@ -11,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/databinding_demo/databinding_demo.iml" filepath="$PROJECT_DIR$/databinding_demo/databinding_demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/demo.iml" filepath="$PROJECT_DIR$/demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/dex_demo/dex_demo.iml" filepath="$PROJECT_DIR$/dex_demo/dex_demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/material_design/material_design.iml" filepath="$PROJECT_DIR$/material_design/material_design.iml" />
       <module fileurl="file://$PROJECT_DIR$/mqttretrofit/mqttretrofit.iml" filepath="$PROJECT_DIR$/mqttretrofit/mqttretrofit.iml" />
       <module fileurl="file://$PROJECT_DIR$/router_demo/router_demo.iml" filepath="$PROJECT_DIR$/router_demo/router_demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/scroll/scroll.iml" filepath="$PROJECT_DIR$/scroll/scroll.iml" />
