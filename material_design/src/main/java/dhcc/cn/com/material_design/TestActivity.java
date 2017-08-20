@@ -40,6 +40,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, FatingActionButtonActivity.class));
                 break;
             case R.id.button4:
+                startActivity(new Intent(this,ObservableActivity.class));
                 break;
         }
     }

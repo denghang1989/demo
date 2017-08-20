@@ -19,10 +19,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".findview.SimpleDataBindingActivity"/>
-        <activity android:name=".findview.SimpleDataBinding02Activity"/>
         <activity android:name=".simple_data.SimpleDataActivity"/>
         <activity android:name=".simple_image.SimpleImageActivity"/>
         <activity android:name=".simple_image_hold_error.HolderImageActivity"/>
+        <activity android:name=".simple_lambda.LambdaActivity"/>
+        <activity android:name=".simple_animator.AnimatorActivity"/>
     </application>
 
 </manifest>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="model"
+            type="com.example.databinding_demo.simple_animator.ViewModel"/>
+        <variable
+            name="show"
+            type="Boolean"/>
+        <import type="android.view.View"/>
+    </data>
+
+<LinearLayout
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView_animator"
+        android:src="@mipmap/ic_launcher_round"
+        android:layout_width="100dp"
+        android:visibility="@{show ? View.VISIBLE : View.GONE}"
+        android:layout_height="100dp"/>
+
+    <CheckBox
+        android:id="@+id/checkbox_animator"
+        android:layout_width="wrap_content"
+        android:onCheckedChanged="@{model.changed}"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
+
+</layout>

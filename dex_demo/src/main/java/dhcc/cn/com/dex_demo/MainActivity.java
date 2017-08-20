@@ -1,14 +1,7 @@
 package dhcc.cn.com.dex_demo;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-
-import java.io.File;
-import java.lang.reflect.Method;
-
-import dalvik.system.DexClassLoader;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -18,19 +11,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        File externalStorageDirectory = Environment.getExternalStorageDirectory();
-        File optimiDexPath = new File(externalStorageDirectory, "out.jar");
+/*        File optimiDexPath = new File(Environment.getExternalStorageDirectory(), "plugin.apk");
+        if (optimiDexPath.exists()) {
+            Log.d(TAG, "onCreate: "+ optimiDexPath.length());
+        }
+        File appDir = getDir("plugin", Context.MODE_PRIVATE);
 
         try {
-            DexClassLoader dex = new DexClassLoader(optimiDexPath.getAbsolutePath(), getFilesDir().getAbsolutePath(), null, getClassLoader());
-            Class<?> loadClass = dex.loadClass("com.fgecctv.Test");
+            DexClassLoader dex = new DexClassLoader(optimiDexPath.getAbsolutePath(), appDir.getAbsolutePath(), null, getClassLoader());
+            Class<?> loadClass = dex.loadClass("com.android.tools.fd.runtime.Logging");
             Method[] methods = loadClass.getMethods();
             for (Method method : methods) {
                 Log.d(TAG, "onCreate: "+ method.getName());
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 }

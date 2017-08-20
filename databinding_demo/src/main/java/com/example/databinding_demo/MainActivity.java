@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.example.databinding_demo.findview.SimpleDataBinding02Activity;
 import com.example.databinding_demo.findview.SimpleDataBindingActivity;
+import com.example.databinding_demo.simple_animator.AnimatorActivity;
 import com.example.databinding_demo.simple_data.SimpleDataActivity;
 import com.example.databinding_demo.simple_image.SimpleImageActivity;
+import com.example.databinding_demo.simple_lambda.LambdaActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -25,7 +26,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, SimpleDataBindingActivity.class));
                 break;
             case R.id.button2:
-                startActivity(new Intent(this, SimpleDataBinding02Activity.class));
                 break;
             case R.id.button3:
                 startActivity(new Intent(this, SimpleDataActivity.class));
@@ -34,8 +34,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, SimpleImageActivity.class));
                 break;
             case R.id.button5:
+                startActivity(new Intent(this, LambdaActivity.class));
                 break;
             case R.id.button6:
+                startActivity(new Intent(this, AnimatorActivity.class));
                 break;
             case R.id.button7:
                 break;
