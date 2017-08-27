@@ -9,11 +9,13 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/architecture_components" />
             <option value="$PROJECT_DIR$/aspectjx" />
             <option value="$PROJECT_DIR$/auto_layout" />
             <option value="$PROJECT_DIR$/class_annotation" />
             <option value="$PROJECT_DIR$/class_inject_annotation" />
             <option value="$PROJECT_DIR$/classload" />
+            <option value="$PROJECT_DIR$/constraintlayout_animation" />
             <option value="$PROJECT_DIR$/databinding_demo" />
             <option value="$PROJECT_DIR$/dex_demo" />
             <option value="$PROJECT_DIR$/fragment_communication" />
@@ -22,6 +24,7 @@
             <option value="$PROJECT_DIR$/mqttretrofit" />
             <option value="$PROJECT_DIR$/plugin_didi" />
             <option value="$PROJECT_DIR$/router_demo" />
+            <option value="$PROJECT_DIR$/rxjava_model" />
             <option value="$PROJECT_DIR$/scroll" />
             <option value="$PROJECT_DIR$/test_mqtt" />
           </set>

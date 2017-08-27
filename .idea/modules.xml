@@ -3,11 +3,13 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/architecture_components/architecture_components.iml" filepath="$PROJECT_DIR$/architecture_components/architecture_components.iml" />
       <module fileurl="file://$PROJECT_DIR$/aspectjx/aspectjx.iml" filepath="$PROJECT_DIR$/aspectjx/aspectjx.iml" />
       <module fileurl="file://$PROJECT_DIR$/auto_layout/auto_layout.iml" filepath="$PROJECT_DIR$/auto_layout/auto_layout.iml" />
       <module fileurl="file://$PROJECT_DIR$/class_annotation/class_annotation.iml" filepath="$PROJECT_DIR$/class_annotation/class_annotation.iml" />
       <module fileurl="file://$PROJECT_DIR$/class_inject_annotation/class_inject_annotation.iml" filepath="$PROJECT_DIR$/class_inject_annotation/class_inject_annotation.iml" />
       <module fileurl="file://$PROJECT_DIR$/classload/classload.iml" filepath="$PROJECT_DIR$/classload/classload.iml" />
+      <module fileurl="file://$PROJECT_DIR$/constraintlayout_animation/constraintlayout_animation.iml" filepath="$PROJECT_DIR$/constraintlayout_animation/constraintlayout_animation.iml" />
       <module fileurl="file://$PROJECT_DIR$/databinding_demo/databinding_demo.iml" filepath="$PROJECT_DIR$/databinding_demo/databinding_demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/demo.iml" filepath="$PROJECT_DIR$/demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/dex_demo/dex_demo.iml" filepath="$PROJECT_DIR$/dex_demo/dex_demo.iml" />
@@ -17,6 +19,7 @@
       <module fileurl="file://$PROJECT_DIR$/mqttretrofit/mqttretrofit.iml" filepath="$PROJECT_DIR$/mqttretrofit/mqttretrofit.iml" />
       <module fileurl="file://$PROJECT_DIR$/plugin_didi/plugin_didi.iml" filepath="$PROJECT_DIR$/plugin_didi/plugin_didi.iml" />
       <module fileurl="file://$PROJECT_DIR$/router_demo/router_demo.iml" filepath="$PROJECT_DIR$/router_demo/router_demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rxjava_model/rxjava_model.iml" filepath="$PROJECT_DIR$/rxjava_model/rxjava_model.iml" />
       <module fileurl="file://$PROJECT_DIR$/scroll/scroll.iml" filepath="$PROJECT_DIR$/scroll/scroll.iml" />
       <module fileurl="file://$PROJECT_DIR$/test_mqtt/test_mqtt.iml" filepath="$PROJECT_DIR$/test_mqtt/test_mqtt.iml" />
     </modules>
